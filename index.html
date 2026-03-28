@@ -129,6 +129,19 @@ nav a:focus-visible,
   background: rgba(37,99,235,.1);
 }
 
+/* Disable hover-like flicker on touch devices */
+@media (hover: none) {
+  nav a:hover,
+  .mobile-menu a:hover {
+    color: var(--text);
+  }
+  nav a:focus-visible,
+  .mobile-menu a:focus-visible {
+    outline: 2px solid var(--blue-light);
+    outline-offset: 2px;
+  }
+}
+
 .logo { display: flex; align-items: center; gap: 0.75rem; }
 .logo img {
   height: clamp(90px, 15vw, 210px);
@@ -1179,8 +1192,20 @@ function setActiveLink(linkClicked) {
 }
 
 navLinks.forEach(link => {
-  link.addEventListener('click', () => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+    const targetId = link.getAttribute('href')?.replace('#', '');
+    const targetEl = targetId ? document.getElementById(targetId) : null;
+    if (targetEl) {
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
     setActiveLink(link);
+    link.blur();
+
+    // For mobile menu links, close menu after click
+    if (mobileMenu.classList.contains('open')) {
+      closeMenu();
+    }
   });
 });
 
