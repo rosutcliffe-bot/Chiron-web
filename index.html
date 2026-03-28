@@ -121,6 +121,64 @@ nav a:hover { color: var(--blue-light); }
   border-top: 1px solid rgba(255,123,123,0.15);
 }
 
+/* Carousel */
+.carousel-container {
+  position: relative;
+  margin: 2rem 0;
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.carousel-track {
+  display: flex;
+  transition: transform 0.45s ease;
+}
+.carousel-slide {
+  min-width: 100%;
+  user-select: none;
+  position: relative;
+}
+.carousel-slide img,
+.carousel-slide video {
+  width: 100%;
+  height: 330px;
+  display: block;
+  object-fit: cover;
+}
+.carousel-slide video {
+  background: black;
+}
+.carousel-controls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.carousel-btn {
+  pointer-events: all;
+  border: none;
+  background: rgba(15,23,42,0.55);
+  color: white;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.5rem;
+  transition: transform 0.2s, background 0.2s;
+}
+.carousel-btn:hover { transform: scale(1.1); background: rgba(15,23,42,0.72); }
+
 .card {
   background: white; padding: 1.5rem; border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.06);
@@ -543,6 +601,34 @@ footer {
   </div>
 </section>
 
+<section id="image-gallery" class="section-accent-light">
+  <h2 class="fade-up">Image Carousel</h2>
+  <p class="fade-up">All images referenced in this repository are shown here in a carousel.</p>
+  <div class="carousel-container fade-up" aria-label="Image carousel" role="region">
+    <div class="carousel-track" id="carouselTrack">
+      <div class="carousel-slide"><img src="new_logo-removebg-preview.png" alt="Chiron Remote & Extended Care logo"></div>
+      <div class="carousel-slide"><img src="Foggycliff4.jpeg" alt="Foggy cliff"></div>
+      <div class="carousel-slide"><img src="Heli-remote2.jpeg" alt="Remote helicopter"></div>
+      <div class="carousel-slide"><img src="Remote location1.jpeg" alt="Remote location"></div>
+      <div class="carousel-slide"><img src="Water-rescue3.jpeg" alt="Water rescue"></div>
+      <div class="carousel-slide"><img src="cliff_heli.jpeg" alt="Cliff helicopter"></div>
+      <div class="carousel-slide"><img src="Equipment.jpeg" alt="Equipment"></div>
+      <div class="carousel-slide"><img src="very-cool-dad-pic.jpeg" alt="Very cool dad"></div>
+      <div class="carousel-slide">
+        <video playsinline muted loop controls preload="none" poster="Heli-remote2.jpeg">
+          <source src="Helicopter_video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="carousel-slide"><img src="https://www.chironremotecare.com/og-image.jpg" alt="Chiron Remote & Extended Care preview image"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="carouselPrev" aria-label="Previous image">‹</button>
+      <button class="carousel-btn" id="carouselNext" aria-label="Next image">›</button>
+    </div>
+  </div>
+</section>
+
 <section id="about" class="section-accent">
   <h2 class="fade-up">About</h2>
   <p class="fade-up">
@@ -743,6 +829,46 @@ function animateOnScroll() {
 }
 window.addEventListener('scroll', animateOnScroll);
 window.addEventListener('load', animateOnScroll);
+
+/* ─── Image Carousel ──────────────────────────────────────────────────── */
+(function(){
+  const track = document.getElementById('carouselTrack');
+  const slides = track ? Array.from(track.children) : [];
+  const prevBtn = document.getElementById('carouselPrev');
+  const nextBtn = document.getElementById('carouselNext');
+  if (!track || slides.length === 0 || !prevBtn || !nextBtn) return;
+
+  let current = 0;
+  const videos = track.querySelectorAll('video');
+
+  const updateVideoState = () => {
+    videos.forEach((video, idx) => {
+      if (idx === current) {
+        video.muted = true;
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+        video.currentTime = 0;
+      }
+    });
+  };
+
+  const goTo = (index) => {
+    current = (index + slides.length) % slides.length;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    updateVideoState();
+  };
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  let autoplay = setInterval(() => goTo(current + 1), 5000);
+
+  [prevBtn, nextBtn, track].forEach(el => {
+    el.addEventListener('mouseenter', () => clearInterval(autoplay));
+    el.addEventListener('mouseleave', () => { autoplay = setInterval(() => goTo(current + 1), 5000); });
+  });
+}());
 
 /* ─── Hamburger Menu ──────────────────────────────────────────────────── */
 const hamburger = document.getElementById('hamburger');
