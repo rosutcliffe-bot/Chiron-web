@@ -88,7 +88,9 @@ nav a,
   font-weight: 500;
   font-size: 0.95rem;
   user-select: none;
-  transition: color 0.2s ease;
+  transition: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 nav .logo img {
   max-height: 110px;
@@ -548,11 +550,12 @@ footer {
   inset: 0;
   background: rgba(15, 23, 42, 0.55);
   z-index: 9998;
-  display: none !important;
+  display: none;
   align-items: flex-end;
   justify-content: center;
   padding: 1rem;
 }
+#cookie-overlay:not(.hidden) { display: flex; }
 #cookie-overlay.hidden { display: none; }
 
 #cookie-banner {
@@ -1329,7 +1332,13 @@ document.getElementById('cookie-privacy-link').addEventListener('click', (e) => 
 
 // On load: show banner only if no prior consent recorded
 (function init() {
-  overlay.classList.add('hidden');
+  const saved = getConsent();
+  if (!saved) {
+    overlay.classList.remove('hidden');
+  } else {
+    overlay.classList.add('hidden');
+    if (saved.analytics) loadAnalytics();
+  }
 })();
 
 // Analytics loader — only called after explicit consent
