@@ -91,7 +91,13 @@ nav a,
   transition: color 0.2s ease;
 }
 nav .logo img {
-  max-height: 78px;
+  max-height: 110px;
+  height: auto;
+}
+@media (max-width: 900px) {
+  nav .logo img {
+    max-height: 90px;
+  }
 }
 nav a.active {
   color: var(--blue);
@@ -1142,16 +1148,25 @@ if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 
-window.addEventListener('beforeunload', () => {
-  window.scrollTo(0, 0);
-});
-
-window.addEventListener('load', () => {
+function enforceTopOnLoad() {
   if (window.location.hash) {
     history.replaceState(null, '', window.location.pathname + window.location.search);
   }
   window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+}
+
+window.addEventListener('beforeunload', () => {
+  window.scrollTo(0, 0);
 });
+
+window.addEventListener('pageshow', (event) => {
+  // handle bfcache/restore paths on mobile and desktop
+  if (event.persisted || window.performance && window.performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
+    enforceTopOnLoad();
+  }
+});
+
+window.addEventListener('load', enforceTopOnLoad);
 
 function setActiveLink(linkClicked) {
   navLinks.forEach(link => {
