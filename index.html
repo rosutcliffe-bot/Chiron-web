@@ -1131,25 +1131,35 @@ document.addEventListener('keydown', e => {
 });
 
 const navLinks = document.querySelectorAll('nav .nav-links a, .mobile-menu a');
-const sections = Array.from(navLinks)
-  .map(link => document.getElementById(link.getAttribute('href')?.replace('#', '')))
-  .filter(Boolean);
 
-function setActiveLink() {
-  const offset = window.scrollY + 80;
-  let currentSection = sections[0];
-  for (const section of sections) {
-    if (section.offsetTop <= offset) {
-      currentSection = section;
-    }
-  }
+// Avoid browser auto-scroll restoration when refreshed
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+window.addEventListener('beforeunload', () => {
+  window.scrollTo(0, 0);
+});
+
+window.addEventListener('load', () => {
+  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+});
+
+function setActiveLink(linkClicked) {
   navLinks.forEach(link => {
-    link.classList.toggle('active', link.getAttribute('href') === '#' + currentSection.id);
+    if (linkClicked) {
+      link.classList.toggle('active', link === linkClicked);
+    } else {
+      link.classList.remove('active');
+    }
   });
 }
 
-window.addEventListener('scroll', setActiveLink);
-window.addEventListener('load', setActiveLink);
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    setActiveLink(link);
+  });
+});
 
 const backToTopBtn = document.getElementById('backToTop');
 window.addEventListener('scroll', () => {
