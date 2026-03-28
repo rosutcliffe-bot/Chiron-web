@@ -86,6 +86,11 @@ nav a,
   user-select: none;
   transition: color 0.2s ease;
 }
+nav a.active,
+.mobile-menu a.active {
+  color: var(--blue);
+  text-decoration: underline;
+}
 nav a:hover,
 .mobile-menu a:hover {
   color: var(--blue-light);
@@ -106,8 +111,10 @@ nav a:focus-visible,
 
 .logo { display: flex; align-items: center; gap: 0.75rem; }
 .logo img {
-  height: clamp(120px, 18vw, 260px);
+  height: clamp(90px, 15vw, 210px);
   width: auto;
+  max-width: 220px;
+  display: block;
 }
 
 .logo-text {
@@ -175,7 +182,7 @@ nav a:focus-visible,
 .carousel-slide img,
 .carousel-slide video {
   width: 100%;
-  height: 840px;
+  height: clamp(420px, 60vh, 840px);
   display: block;
   object-fit: cover;
 }
@@ -334,7 +341,6 @@ footer {
   gap: 0;
   transform: translateY(-100%);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: fixed; /* keep fixed, close btn uses absolute within it */
 }
 .mobile-menu.open {
   transform: translateY(0);
@@ -367,6 +373,27 @@ footer {
   transition: color 0.2s, background 0.2s;
 }
 .mobile-menu-close:hover { color: var(--blue); background: rgba(30,58,138,0.07); }
+
+#backToTop {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  z-index: 150;
+}
+#backToTop.show { opacity: 1; visibility: visible; }
 
 @media (max-width: 700px) {
   section { padding: 4rem 6%; }
@@ -595,8 +622,8 @@ footer {
 </div>
 
 <nav>
-  <div class="logo" style="display:flex;align-items:center;">
-    <img src="new_logo-removebg-preview.png" alt="Chiron Remote & Extended Care logo" style="height:150px;width:auto;">
+  <div class="logo">
+    <img src="new_logo-removebg-preview.png" alt="Chiron Remote & Extended Care logo">
   </div>
   <div class="nav-links">
     <a href="#about">About</a>
@@ -635,13 +662,13 @@ footer {
   <p class="fade-up">Showcasing field operations and adventure scenes in a panoramic carousel.</p>
   <div class="carousel-container fade-up" aria-label="Image carousel" role="region">
     <div class="carousel-track" id="carouselTrack">
-      <div class="carousel-slide"><img src="Foggycliff4.jpeg" alt="Foggy cliff"></div>
-      <div class="carousel-slide"><img src="Heli-remote2.jpeg" alt="Remote helicopter"></div>
-      <div class="carousel-slide"><img src="Remote location1.jpeg" alt="Remote location"></div>
-      <div class="carousel-slide"><img src="Water-rescue3.jpeg" alt="Water rescue"></div>
-      <div class="carousel-slide"><img src="cliff_heli.jpeg" alt="Cliff helicopter"></div>
-      <div class="carousel-slide"><img src="Equipment.jpeg" alt="Equipment"></div>
-      <div class="carousel-slide"><img src="very-cool-dad-pic.jpeg" alt="Very cool dad"></div>
+      <div class="carousel-slide"><img src="Foggycliff4.jpeg" alt="Foggy cliff" loading="lazy"></div>
+      <div class="carousel-slide"><img src="Heli-remote2.jpeg" alt="Remote helicopter" loading="lazy"></div>
+      <div class="carousel-slide"><img src="Remote location1.jpeg" alt="Remote location" loading="lazy"></div>
+      <div class="carousel-slide"><img src="Water-rescue3.jpeg" alt="Water rescue" loading="lazy"></div>
+      <div class="carousel-slide"><img src="cliff_heli.jpeg" alt="Cliff helicopter" loading="lazy"></div>
+      <div class="carousel-slide"><img src="Equipment.jpeg" alt="Equipment" loading="lazy"></div>
+      <div class="carousel-slide"><img src="very-cool-dad-pic.jpeg" alt="Very cool dad" loading="lazy"></div>
       <div class="carousel-slide">
         <video playsinline muted loop controls preload="none" poster="Heli-remote2.jpeg">
           <source src="Helicopter_video.mp4" type="video/mp4">
@@ -790,6 +817,8 @@ footer {
   </div>
 </section>
 
+<button id="backToTop" aria-label="Scroll back to top">↑</button>
+
 <footer>
   <p style="font-size:0.95rem;font-weight:600;color:var(--blue);letter-spacing:0.3px;margin-bottom:0.6rem;">
     Chiron Remote &amp; Extended Care — <a href="mailto:will.sutcliffe@chironremote.com" style="color:var(--blue);text-decoration:none;">will.sutcliffe@chironremote.com</a>
@@ -890,10 +919,45 @@ window.addEventListener('load', animateOnScroll);
   nextBtn.addEventListener('click', () => goTo(current + 1));
 
   let autoplay = setInterval(() => goTo(current + 1), 3000);
+  let pausedByUser = false;
+
+  const startAutoplay = () => {
+    if (pausedByUser) return;
+    clearInterval(autoplay);
+    autoplay = setInterval(() => goTo(current + 1), 3000);
+  };
+
+  const stopAutoplay = () => { clearInterval(autoplay); };
 
   [prevBtn, nextBtn, track].forEach(el => {
-    el.addEventListener('mouseenter', () => clearInterval(autoplay));
-    el.addEventListener('mouseleave', () => { autoplay = setInterval(() => goTo(current + 1), 3000); });
+    el.addEventListener('mouseenter', stopAutoplay);
+    el.addEventListener('mouseleave', startAutoplay);
+  });
+
+  [prevBtn, nextBtn].forEach(btn => btn.addEventListener('click', () => {
+    pausedByUser = true;
+    clearInterval(autoplay);
+    setTimeout(() => { pausedByUser = false; startAutoplay(); }, 5000);
+  }));
+
+  let touchStartX = 0;
+  track.addEventListener('touchstart', (e) => {
+    stopAutoplay();
+    pausedByUser = true;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  track.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchEndX - touchStartX;
+    if (Math.abs(diff) > 50) {
+      if (diff < 0) {
+        goTo(current + 1);
+      } else {
+        goTo(current - 1);
+      }
+    }
+    setTimeout(() => { pausedByUser = false; startAutoplay(); }, 3000);
   });
 }());
 
@@ -936,6 +1000,37 @@ mobileMenu.querySelectorAll('a').forEach(link => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeMenu();
 });
+
+const navLinks = document.querySelectorAll('nav .nav-links a, .mobile-menu a');
+const sections = Array.from(navLinks)
+  .map(link => document.getElementById(link.getAttribute('href')?.replace('#', '')))
+  .filter(Boolean);
+
+function setActiveLink() {
+  const offset = window.scrollY + 80;
+  let currentSection = sections[0];
+  for (const section of sections) {
+    if (section.offsetTop <= offset) {
+      currentSection = section;
+    }
+  }
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + currentSection.id);
+  });
+}
+
+window.addEventListener('scroll', setActiveLink);
+window.addEventListener('load', setActiveLink);
+
+const backToTopBtn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > window.innerHeight / 2) {
+    backToTopBtn.classList.add('show');
+  } else {
+    backToTopBtn.classList.remove('show');
+  }
+});
+backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
 /* ─── FAQ Accordion ───────────────────────────────────────────────────── */
 document.querySelectorAll('.faq-question').forEach(q => {
