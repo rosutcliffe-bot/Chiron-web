@@ -72,9 +72,13 @@ p { line-height: 1.6; color: var(--muted); }
 
 nav {
   position: fixed; top: 0; width: 100%;
-  background: white; padding: 0.3rem 10%;
+  height: 88px;
+  background: white; padding: 0.5rem 10%;
   display: flex; justify-content: space-between; align-items: center;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05); z-index: 100;
+}
+html {
+  scroll-padding-top: 100px;
 }
 nav a,
 .mobile-menu a {
@@ -144,12 +148,13 @@ nav a:focus-visible,
 }
 
 .hero {
-  min-height: calc(100vh - 84px);
+  min-height: calc(100vh - 88px);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 7.5rem 8% 3rem 8%;
+  padding: 8.5rem 8% 3rem 8%;
+  margin-top: 88px; /* avoid fixed header overlap */
   color: white;
   overflow: hidden;
 }
@@ -458,11 +463,16 @@ footer {
 
 @media (min-width: 901px) {
   .hero-side-image { display: block; }
+  .carousel-container {
+    max-width: 1200px;
+    min-height: 590px;
+    max-height: 740px;
+  }
   .carousel-slide img,
   .carousel-slide video {
-    height: clamp(560px, 55vh, 740px);
+    height: min(70vh, 720px);
+    max-height: 720px;
   }
-  .carousel-container { max-width: 1200px; min-height: 700px; }
   .carousel-btn { width: 42px; height: 42px; }
 }
 
@@ -731,7 +741,6 @@ footer {
       <div class="carousel-slide"><img src="Remote location1.jpeg" alt="Remote location" loading="lazy"></div>
       <div class="carousel-slide"><img src="Water-rescue3.jpeg" alt="Water rescue" loading="lazy"></div>
       <div class="carousel-slide"><img src="cliff_heli.jpeg" alt="Cliff helicopter" loading="lazy"></div>
-      <div class="carousel-slide"><img src="Equipment.jpeg" alt="Equipment" loading="lazy"></div>
       <div class="carousel-slide"><img src="very-cool-dad-pic.jpeg" alt="Very cool dad" loading="lazy"></div>
       <div class="carousel-slide">
         <video playsinline muted loop controls preload="none" poster="Heli-remote2.jpeg">
