@@ -422,19 +422,33 @@ footer {
 
 @media (max-width: 900px) {
   section { padding: 4rem 6%; }
-  .hero { flex-direction: column; justify-content: center; padding: 3rem 6rem 4rem 6rem; }
+  .hero { flex-direction: column; justify-content: center; align-items: center; padding: 3rem 6rem 4rem 6rem; min-height: auto; }
   .hero-content { text-align: center; }
   .hero-side-image { display: none; }
   .hero h1 { font-size: 2.2rem; }
+  .hero p { font-size: 1.05rem; }
   .logo-text .brand-chiron { font-size: 1rem; }
   .logo-text .brand-sub { font-size: 0.65rem; }
   .nav-links { display: none; }
   .hamburger { display: flex; }
   .mobile-menu { display: flex; }
 
+  .carousel-container {
+    min-height: auto;
+    max-width: 100%;
+    border-radius: 10px;
+    margin: 1.5rem 0;
+  }
   .carousel-slide img,
   .carousel-slide video {
-    height: clamp(260px, 45vh, 520px);
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+  .carousel-controls {
+    height: 100%;
+    pointer-events: none;
   }
   .carousel-btn { width: 36px; height: 36px; font-size: 1rem; }
 }
@@ -700,7 +714,7 @@ footer {
     <p style="font-size: 1.5em;">Enabling best care, when definitive care is not an option.</p>
   </div>
   <div class="hero-side-image fade-up" aria-hidden="true">
-    <img src="Equiment.jpeg" alt="Remote expedition equipment" loading="lazy">
+    <img src="Equipment.jpeg" alt="Remote expedition equipment" loading="lazy">
   </div>
 </section>
 
