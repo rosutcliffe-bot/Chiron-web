@@ -125,31 +125,21 @@ nav a:focus-visible,
   background: transparent;
 }
 
-/* On touch devices disable hover/focus coloring entirely */
+/* On touch devices disable hover/focus/active coloring entirely */
 @media (hover: none) {
   nav a:hover,
   .mobile-menu a:hover,
   nav a:focus,
   .mobile-menu a:focus,
   nav a:active,
-  .mobile-menu a:active {
+  .mobile-menu a:active,
+  nav a:focus-visible,
+  .mobile-menu a:focus-visible {
     color: var(--text);
     background: transparent;
     outline: none;
     text-shadow: none;
-  }
-}
-
-/* Disable hover-like flicker on touch devices */
-@media (hover: none) {
-  nav a:hover,
-  .mobile-menu a:hover {
-    color: var(--text);
-  }
-  nav a:focus-visible,
-  .mobile-menu a:focus-visible {
-    outline: 2px solid var(--blue-light);
-    outline-offset: 2px;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -280,7 +270,10 @@ nav a:focus-visible,
   justify-content: center;
   margin: 0 0.5rem;
   transition: transform 0.2s, background 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
+.carousel-btn:focus { outline: none; }
+.carousel-btn:focus-visible { outline: 2px solid white; outline-offset: 2px; }
 .carousel-btn:hover { transform: scale(1.1); background: rgba(15,23,42,0.72); }
 
 .carousel-dots {
@@ -300,7 +293,9 @@ nav a:focus-visible,
   background: rgba(255,255,255,0.4);
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
+.carousel-dot:focus { outline: none; }
 .carousel-dot.active {
   background: white;
   transform: scale(1.15);
@@ -405,6 +400,7 @@ footer {
   z-index: 200;
   border-radius: 6px;
   transition: background 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 .hamburger:hover { background: rgba(30,58,138,0.07); }
 .hamburger span {
@@ -462,6 +458,7 @@ footer {
   padding: 0.3rem 0.5rem;
   border-radius: 6px;
   transition: color 0.2s, background 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 .mobile-menu-close:hover { color: var(--blue); background: rgba(30,58,138,0.07); }
 
@@ -483,12 +480,13 @@ footer {
   visibility: hidden;
   transition: opacity 0.25s ease, visibility 0.25s ease;
   z-index: 150;
+  -webkit-tap-highlight-color: transparent;
 }
 #backToTop.show { opacity: 1; visibility: visible; }
 
 @media (max-width: 900px) {
   section { padding: 4rem 6%; }
-  .hero { flex-direction: column; justify-content: center; align-items: center; padding: 3rem 6rem 4rem 6rem; min-height: auto; }
+  .hero { flex-direction: column; justify-content: center; align-items: center; padding: 3rem 6% 4rem 6%; min-height: auto; }
   .hero-content { text-align: center; }
   .hero-side-image { display: none; }
   .hero h1 { font-size: 2.2rem; }
@@ -555,7 +553,7 @@ footer {
 
 #cookie-banner {
   background: white;
-  border-radius: 16px 16px 16px 16px;
+  border-radius: 16px;
   box-shadow: 0 -4px 40px rgba(0,0,0,0.18);
   max-width: 780px;
   width: 100%;
@@ -1142,6 +1140,9 @@ document.querySelectorAll('.fade-up, .fade-left, .fade-right').forEach(el => rev
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      const rect = track.getBoundingClientRect();
+      const inView = rect.bottom > 0 && rect.top < window.innerHeight;
+      if (!inView) return;
       e.preventDefault();
       goTo(e.key === 'ArrowLeft' ? current - 1 : current + 1);
       pausedByUser = true;
@@ -1211,7 +1212,7 @@ window.addEventListener('beforeunload', () => {
 
 window.addEventListener('pageshow', (event) => {
   // handle bfcache/restore paths on mobile and desktop
-  if (event.persisted || window.performance && window.performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
+  if (event.persisted || (typeof window.performance !== 'undefined' && window.performance.getEntriesByType && window.performance.getEntriesByType('navigation')[0]?.type === 'back_forward')) {
     enforceTopOnLoad();
   }
 });
@@ -1344,9 +1345,10 @@ document.getElementById('cookie-prefs-link').addEventListener('click', () => {
   showBanner();
 });
 
-// Smooth scroll for in-banner privacy link (doesn't dismiss banner)
+// Smooth scroll for in-banner privacy link (dismiss banner so content is readable)
 document.getElementById('cookie-privacy-link').addEventListener('click', (e) => {
   e.preventDefault();
+  overlay.classList.add('hidden');
   document.getElementById('privacy-policy').scrollIntoView({ behavior: 'smooth' });
 });
 
