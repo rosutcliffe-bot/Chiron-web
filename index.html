@@ -10,13 +10,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Segoe UI',Tahoma,G
 canvas{display:block}
 
 /* ── Menu ── */
-#menu{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#0b1e15 0%,#163a2c 50%,#0d2818 100%);z-index:100;text-align:center;gap:12px}
-#menu h1{font-size:2.6rem;color:#7ec8a3;letter-spacing:.06em;margin-bottom:0}
+#menu{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(8,20,14,.82);backdrop-filter:blur(6px);z-index:100;text-align:center;gap:12px}
+#menu h1{font-size:2.6rem;color:#8ed8b3;letter-spacing:.06em;margin-bottom:0;text-shadow:0 2px 12px rgba(0,0,0,.5)}
 #menu .subtitle{font-size:1.05rem;color:#8abed4;margin-bottom:10px}
 #menu .mode-row{display:flex;gap:16px;margin:6px 0}
 #menu .mode-row label{cursor:pointer;padding:8px 18px;border-radius:8px;background:rgba(126,200,167,.12);border:1px solid rgba(126,200,167,.25);transition:background .2s,border-color .2s;font-size:.95rem}
 #menu .mode-row input{display:none}
-#menu .mode-row input:checked+span{color:#7ec8a3;font-weight:700}
+#menu .mode-row input:checked+span{color:#8ed8b3;font-weight:700}
 #menu .mode-row label:has(input:checked){background:rgba(126,200,167,.25);border-color:rgba(126,200,167,.5)}
 .btn{padding:12px 36px;font-size:1.15rem;border:none;border-radius:10px;cursor:pointer;transition:background .2s,transform .1s;font-weight:600}
 .btn:active{transform:scale(.97)}
@@ -24,32 +24,35 @@ canvas{display:block}
 .btn-primary:hover{background:linear-gradient(135deg,#3bb58e,#5cc8a8)}
 .btn-secondary{background:rgba(255,255,255,.1);color:#b0d0c8;border:1px solid rgba(255,255,255,.15)}
 .btn-secondary:hover{background:rgba(255,255,255,.18)}
-#menu .controls-hint{font-size:.82rem;color:#6a9a88;margin-top:14px;line-height:1.7}
+#menu .controls-hint{font-size:.82rem;color:#6a9a88;margin-top:14px;line-height:1.7;max-width:500px}
 
 /* ── HUD ── */
 #hud{position:fixed;top:0;left:0;right:0;display:none;pointer-events:none;z-index:30;padding:12px 16px}
 #hud-top{display:flex;justify-content:space-between;align-items:flex-start}
-#speed-box{background:rgba(11,26,20,.75);padding:8px 16px;border-radius:10px;backdrop-filter:blur(4px)}
-#speed-val{font-size:1.8rem;font-weight:700;color:#7ec8a3}
+#speed-box{background:rgba(11,26,20,.7);padding:8px 16px;border-radius:10px;backdrop-filter:blur(4px)}
+#speed-val{font-size:1.8rem;font-weight:700;color:#8ed8b3}
 #speed-unit{font-size:.75rem;color:#6a9a88}
-#heading-box{background:rgba(11,26,20,.75);padding:8px 16px;border-radius:10px;backdrop-filter:blur(4px);text-align:center}
+#rapids-indicator{position:fixed;top:52px;left:16px;display:none;background:rgba(200,60,40,.7);padding:4px 14px;border-radius:8px;backdrop-filter:blur(4px);z-index:30;pointer-events:none;font-size:.8rem;font-weight:700;color:#fff;animation:pulse 1s ease infinite}
+@keyframes pulse{0%,100%{opacity:.7}50%{opacity:1}}
+#heading-box{background:rgba(11,26,20,.7);padding:8px 16px;border-radius:10px;backdrop-filter:blur(4px);text-align:center}
 #heading-val{font-size:1.6rem;font-weight:700;color:#d4e8e0}
 #heading-lbl{font-size:.7rem;color:#6a9a88}
 #stroke-box{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:none;gap:12px;align-items:flex-end;z-index:30;pointer-events:none}
 .stroke-col{text-align:center}
 .stroke-label{font-size:.65rem;color:#6a9a88;margin-top:4px}
 .stroke-track{width:22px;height:70px;background:rgba(255,255,255,.08);border-radius:6px;position:relative;overflow:hidden}
-.stroke-fill{position:absolute;bottom:0;width:100%;background:linear-gradient(0deg,#2a8f6c,#7ec8a3);border-radius:6px;transition:height 80ms}
-#distance-box{position:fixed;bottom:16px;right:16px;display:none;background:rgba(11,26,20,.75);padding:6px 14px;border-radius:10px;backdrop-filter:blur(4px);z-index:30;pointer-events:none;font-size:.85rem;color:#8abed4}
+.stroke-fill{position:absolute;bottom:0;width:100%;background:linear-gradient(0deg,#2a8f6c,#8ed8b3);border-radius:6px;transition:height 80ms}
+#distance-box{position:fixed;bottom:16px;right:16px;display:none;background:rgba(11,26,20,.7);padding:6px 14px;border-radius:10px;backdrop-filter:blur(4px);z-index:30;pointer-events:none;font-size:.85rem;color:#8abed4}
+#collision-flash{position:fixed;inset:0;pointer-events:none;z-index:25;background:radial-gradient(ellipse at center,transparent 40%,rgba(200,40,30,.25) 100%);opacity:0;transition:opacity .15s}
 
 /* ── Toolbar ── */
 #toolbar{position:fixed;top:12px;right:12px;display:none;gap:8px;z-index:40}
-.tb{width:36px;height:36px;border:none;border-radius:8px;background:rgba(11,26,20,.75);color:#7ec8a3;font-size:1.05rem;cursor:pointer;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;transition:background .2s;pointer-events:auto}
+.tb{width:36px;height:36px;border:none;border-radius:8px;background:rgba(11,26,20,.7);color:#8ed8b3;font-size:1.05rem;cursor:pointer;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;transition:background .2s;pointer-events:auto}
 .tb:hover{background:rgba(42,143,108,.45)}
 
 /* ── Pause ── */
 #pause{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,24,18,.88);z-index:80;gap:14px;backdrop-filter:blur(6px)}
-#pause h2{font-size:1.8rem;color:#7ec8a3;margin-bottom:6px}
+#pause h2{font-size:1.8rem;color:#8ed8b3;margin-bottom:6px}
 
 /* ── Touch controls ── */
 #touch{display:none;position:fixed;bottom:0;left:0;right:0;z-index:35;pointer-events:none}
@@ -58,7 +61,6 @@ canvas{display:block}
 #tl{left:16px;width:100px;height:100px}
 #tr{right:16px;width:100px;height:100px}
 
-/* ── Responsive ── */
 @media(max-width:600px){
   #menu h1{font-size:1.7rem}
   #menu .subtitle{font-size:.88rem}
@@ -79,7 +81,8 @@ canvas{display:block}
   </div>
   <button class="btn btn-primary" id="start-btn">Launch Downstream</button>
   <div class="controls-hint">
-    <b>Keyboard:</b> A / D = paddle &nbsp; ← → = steer &nbsp; Q / E = lean &nbsp; Esc = pause &nbsp; C = camera<br>
+    <b>Keyboard:</b> W = forward paddle &nbsp; A / D = paddle left/right &nbsp; S = back-paddle<br>
+    ← → = steer &nbsp; Q / E = lean &nbsp; Esc = pause &nbsp; C = camera<br>
     <b>Mobile:</b> tap left / right zones to paddle
   </div>
 </div>
@@ -91,11 +94,13 @@ canvas{display:block}
     <div id="heading-box"><div id="heading-val">000°</div><div id="heading-lbl">HEADING</div></div>
   </div>
 </div>
+<div id="rapids-indicator">⚠ RAPIDS</div>
 <div id="stroke-box">
   <div class="stroke-col"><div class="stroke-track"><div class="stroke-fill" id="stroke-l"></div></div><div class="stroke-label">L</div></div>
   <div class="stroke-col"><div class="stroke-track"><div class="stroke-fill" id="stroke-r"></div></div><div class="stroke-label">R</div></div>
 </div>
 <div id="distance-box"><span id="dist-val">0</span> m downstream</div>
+<div id="collision-flash"></div>
 
 <!-- Toolbar -->
 <div id="toolbar">
@@ -118,873 +123,781 @@ canvas{display:block}
 </div>
 
 <script src="three.min.js"></script>
-<script>if(typeof THREE==='undefined'){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';document.head.appendChild(s);}</script>
 <script>
 /* ═══════════════════════════════════════════════
    CONFIGURATION
    ═══════════════════════════════════════════════ */
 const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-const CHUNK_SIZE = 60;
-const CHUNKS_AHEAD = 6;
-const CHUNKS_BEHIND = 2;
-const RIVER_BASE_WIDTH = 16;
-const WATER_RES = isMobile ? 6 : 10; // vertices per unit along Z in water mesh
-const BANK_HEIGHT = 6;
+const CHUNK_LEN    = 60;
+const CHUNKS_FWD   = 5;
+const CHUNKS_BACK  = 2;
+const BANK_H       = 7;
+const RIVER_W_BASE = 18;
+const WATER_WIDTH  = 50;          // plane width — wider than any river section
 
 /* ═══════════════════════════════════════════════
    STATE
    ═══════════════════════════════════════════════ */
 let scene, camera, renderer, clock;
-let kayakGroup, paddlePivot, leftBladeMesh, rightBladeMesh;
-let waterMesh;
-let audioCtx;
-const chunks = new Map(); // key: chunkIndex, value: THREE.Group
-const rockColliders = []; // {x, z, radius}
-const eddyZones = []; // {x, z, radius, strength, angle}
+let kayakGroup, paddlePivot;
+let waterMesh, foamParticles;
+let audioCtx, gainNode;
+const chunks     = new Map();
+const colliders  = [];            // {x, z, r}
+const eddies     = [];            // {x, z, r, str}
+const stoppers   = [];            // {zMin, zMax, cx, w}
 
 const S = {
-  mode: 'arcade',
-  playing: false,
-  paused: false,
-  heading: 0,
-  speed: 0,
-  angVel: 0,
-  lean: 0,
-  lStroke: 0,
-  rStroke: 0,
-  paddleAnim: 0,
-  dist: 0,
-  camMode: 0,
-  orbitAngle: 0,
-  posX: 0, posZ: 0, posY: 0,
-  velX: 0, velZ: 0,
-  lastChunkIdx: -999
+  mode:'arcade', playing:false, paused:false,
+  heading:0, speed:0, angVel:0, lean:0,
+  lStroke:0, rStroke:0, paddleAnim:0,
+  posX:0, posZ:0, posY:0,
+  velX:0, velZ:0,
+  dist:0, camMode:0, orbitA:0,
+  lastChunk:-999,
+  collisionFlash:0
 };
-
-const input = { left:false, right:false, steerL:false, steerR:false, leanL:false, leanR:false };
-
-/* ═══════════════════════════════════════════════
-   NOISE — simple hash-based for deterministic generation
-   ═══════════════════════════════════════════════ */
-function hash(n) {
-  let x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
-  return x - Math.floor(x);
-}
-function hash2(x, y) {
-  return hash(x * 157.0 + y * 113.0);
-}
-function smoothNoise(x) {
-  const i = Math.floor(x);
-  const f = x - i;
-  const t = f * f * (3 - 2 * f);
-  return hash(i) * (1 - t) + hash(i + 1) * t;
-}
+const input = {fwd:false,back:false,left:false,right:false,steerL:false,steerR:false,leanL:false,leanR:false};
 
 /* ═══════════════════════════════════════════════
-   RIVER PATH — deterministic functions
+   MATH HELPERS
    ═══════════════════════════════════════════════ */
-function riverCenterX(z) {
-  return 10 * Math.sin(z * 0.007) +
-         5 * Math.sin(z * 0.019 + 1.3) +
-         3 * Math.sin(z * 0.039 + 2.7) +
-         1.5 * Math.sin(z * 0.071 + 0.8);
-}
+function hash(n){ let x=Math.sin(n*127.1+311.7)*43758.5453; return x-Math.floor(x); }
+function hash2(a,b){ return hash(a*157.0+b*113.0); }
+function lerp(a,b,t){ return a+(b-a)*t; }
+function sStep(lo,hi,x){ const t=Math.max(0,Math.min(1,(x-lo)/(hi-lo))); return t*t*(3-2*t); }
 
-function riverWidth(z) {
-  return RIVER_BASE_WIDTH +
-         3.5 * Math.sin(z * 0.013 + 0.5) +
-         2 * Math.sin(z * 0.031 + 1.8) +
-         1.5 * Math.sin(z * 0.057 + 3.1);
+/* ═══════════════════════════════════════════════
+   RIVER PATH  — deterministic from z coordinate
+   ═══════════════════════════════════════════════ */
+function rCenterX(z){
+  return 12*Math.sin(z*0.006)+6*Math.sin(z*0.017+1.3)
+        +3*Math.sin(z*0.037+2.7)+1.8*Math.sin(z*0.063+0.8);
 }
-
-function riverBaseY(z) {
-  // Gradual descent with steeper rapids sections
-  return -z * 0.018 +
-         0.8 * Math.sin(z * 0.009 + 0.4) +
-         0.3 * Math.sin(z * 0.028 + 1.1);
+function rWidth(z){
+  return RIVER_W_BASE+4*Math.sin(z*0.012+.5)+2.5*Math.sin(z*0.029+1.8)
+        +1.5*Math.sin(z*0.053+3.1);
 }
-
-function riverGradient(z) {
-  // Derivative of riverBaseY — steepness
-  const e = 0.5;
-  return (riverBaseY(z + e) - riverBaseY(z - e)) / (2 * e);
+function rBaseY(z){
+  return -z*0.016+0.9*Math.sin(z*0.008+.4)+0.35*Math.sin(z*0.026+1.1)
+        +0.5*Math.sin(z*0.045+1.7);
 }
-
-function riverTangent(z) {
-  const e = 0.5;
-  const dx = riverCenterX(z + e) - riverCenterX(z - e);
-  const dz = 2 * e;
-  const len = Math.hypot(dx, dz);
-  return { x: dx / len, z: dz / len };
+function rGrad(z){
+  const e=.5; return (rBaseY(z+e)-rBaseY(z-e))/(2*e);
 }
-
-function isRapids(z) {
-  // Rapids sections where gradient is steep
-  const g = riverGradient(z);
-  return g < -0.025;
+function rTangent(z){
+  const e=.5,dx=rCenterX(z+e)-rCenterX(z-e),dz=2*e,
+        l=Math.hypot(dx,dz); return {x:dx/l,z:dz/l};
 }
-
-function turbulence(x, z) {
-  // How turbulent the water is at this point
-  const cx = riverCenterX(z);
-  const w = riverWidth(z);
-  const fromCenter = Math.abs(x - cx) / (w * 0.5);
-  let turb = 0;
-  if (isRapids(z)) turb += 0.6;
-  // Near banks = some turbulence
-  if (fromCenter > 0.7) turb += (fromCenter - 0.7) * 1.5;
-  // Near rocks
-  for (const r of rockColliders) {
-    const d = Math.hypot(x - r.x, z - r.z);
-    if (d < r.radius * 3) {
-      turb += (1 - d / (r.radius * 3)) * 0.8;
-    }
-  }
-  return Math.min(turb, 1.0);
-}
+function isRapids(z){ return rGrad(z)<-0.018; }
 
 /* ═══════════════════════════════════════════════
    WATER HEIGHT & CURRENT
    ═══════════════════════════════════════════════ */
-function waterH(x, z, t) {
-  let h = riverBaseY(z);
-  const tang = riverTangent(z);
-  const rap = isRapids(z);
-
-  // Flow-aligned ripples
-  const flowPhase = tang.x * x + tang.z * z;
-  h += 0.06 * Math.sin(flowPhase * 1.8 - t * 3.5);
-  h += 0.03 * Math.sin(flowPhase * 3.2 + x * 0.7 - t * 4.2);
-
-  // Standing waves in rapids
-  if (rap) {
-    h += 0.15 * Math.sin(z * 1.2 - t * 0.5) * Math.cos(x * 0.3);
-    h += 0.08 * Math.sin(z * 2.5 + t * 0.3);
+function waterH(x,z,t){
+  let h=rBaseY(z);
+  const tg=rTangent(z), fp=tg.x*x+tg.z*z;
+  h+=.06*Math.sin(fp*1.8-t*3.5)+.03*Math.sin(fp*3.2+x*.7-t*4.2);
+  if(isRapids(z)){
+    h+=.20*Math.sin(z*1.1-t*.5)*Math.cos(x*.3);
+    h+=.10*Math.sin(z*2.4+t*.3);
   }
-
-  // Cross-river ripples
-  h += 0.02 * Math.sin(x * 2.1 + z * 0.5 - t * 2.8);
-  h += 0.015 * Math.sin(x * 3.5 - z * 0.8 + t * 3.1);
-
+  h+=.02*Math.sin(x*2.1+z*.5-t*2.8)+.015*Math.sin(x*3.5-z*.8+t*3.1);
   return h;
 }
-
-function waterNormal(x, z, t) {
-  const e = 0.15;
-  const c = waterH(x, z, t);
-  const nx = -(waterH(x + e, z, t) - c) / e;
-  const nz = -(waterH(x, z + e, t) - c) / e;
-  const len = Math.hypot(nx, 1, nz);
-  return new THREE.Vector3(nx / len, 1 / len, nz / len);
+function waterN(x,z,t){
+  const e=.15,c=waterH(x,z,t);
+  return new THREE.Vector3(-(waterH(x+e,z,t)-c)/e,1,-(waterH(x,z+e,t)-c)/e).normalize();
 }
 
-function riverCurrent(x, z) {
-  const cx = riverCenterX(z);
-  const w = riverWidth(z);
-  const halfW = w * 0.5;
-  const dist = Math.abs(x - cx);
+function rCurrent(x,z){
+  const cx=rCenterX(z),w=rWidth(z),hw=w*.5;
+  let fromC=Math.abs(x-cx)/hw;
+  let str=Math.max(0,1-fromC); str*=str;
+  const grad=-rGrad(z),base=2.0+grad*35;
+  str*=Math.max(base,.4);
+  const tg=rTangent(z);
 
-  // Current strongest in center, weakens near banks
-  let strength = Math.max(0, 1 - (dist / halfW));
-  strength = strength * strength; // Quadratic falloff
-
-  // Steeper = faster current
-  const grad = -riverGradient(z);
-  const baseSpeed = 1.8 + grad * 30;
-  strength *= Math.max(baseSpeed, 0.5);
-
-  const tang = riverTangent(z);
-
-  // Check eddies
-  for (const ed of eddyZones) {
-    const d = Math.hypot(x - ed.x, z - ed.z);
-    if (d < ed.radius) {
-      const f = 1 - d / ed.radius;
-      const angle = Math.atan2(x - ed.x, z - ed.z) + Math.PI * 0.5;
-      return {
-        x: Math.sin(angle) * ed.strength * f * 2 - tang.x * strength * f * 0.3,
-        z: Math.cos(angle) * ed.strength * f * 2 - tang.z * strength * f * 0.3,
-        eddy: f
-      };
+  // Stopper zones — reverse current at steep drops
+  for(const st of stoppers){
+    if(z>=st.zMin&&z<=st.zMax&&Math.abs(x-st.cx)<st.w*.5){
+      const f=sStep(st.zMin,st.zMin+(st.zMax-st.zMin)*.5,z);
+      return {x:-tg.x*str*f*1.5, z:-tg.z*str*f*1.5, eddy:0, stopper:f};
     }
   }
 
-  return { x: tang.x * strength, z: tang.z * strength, eddy: 0 };
+  // Eddies
+  for(const ed of eddies){
+    const d=Math.hypot(x-ed.x,z-ed.z);
+    if(d<ed.r){
+      const f=1-d/ed.r, a=Math.atan2(x-ed.x,z-ed.z)+Math.PI*.5;
+      return {
+        x:Math.sin(a)*ed.str*f*2-tg.x*str*f*.2,
+        z:Math.cos(a)*ed.str*f*2-tg.z*str*f*.2,
+        eddy:f, stopper:0
+      };
+    }
+  }
+  return {x:tg.x*str, z:tg.z*str, eddy:0, stopper:0};
 }
 
 /* ═══════════════════════════════════════════════
-   THREE.JS SETUP
+   THREE.JS  INIT
    ═══════════════════════════════════════════════ */
-function init() {
-  clock = new THREE.Clock();
+function init(){
+  clock=new THREE.Clock();
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x9ab8c8);
+  scene.fog=new THREE.FogExp2(0x9ab8c8,.004);
 
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x87a5b5);
-  scene.fog = new THREE.FogExp2(0x87a5b5, 0.005);
+  camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.3,600);
+  camera.position.set(0,5,-8);
 
-  camera = new THREE.PerspectiveCamera(65, innerWidth / innerHeight, 0.3, 600);
-  camera.position.set(0, 5, -8);
-
-  renderer = new THREE.WebGLRenderer({ antialias: !isMobile });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.5 : 2));
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
-  renderer.shadowMap.enabled = !isMobile;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer=new THREE.WebGLRenderer({antialias:!isMobile,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,isMobile?1.5:2));
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.15;
+  renderer.shadowMap.enabled=!isMobile;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   document.body.prepend(renderer.domElement);
 
   // Lights
-  const sun = new THREE.DirectionalLight(0xffeedd, 1.6);
-  sun.position.set(40, 80, 60);
-  if (!isMobile) {
-    sun.castShadow = true;
-    sun.shadow.mapSize.set(1024, 1024);
-    sun.shadow.camera.near = 1;
-    sun.shadow.camera.far = 200;
-    sun.shadow.camera.left = -50;
-    sun.shadow.camera.right = 50;
-    sun.shadow.camera.top = 50;
-    sun.shadow.camera.bottom = -50;
+  const sun=new THREE.DirectionalLight(0xffeedd,2.0);
+  sun.position.set(40,80,60);
+  if(!isMobile){
+    sun.castShadow=true;
+    sun.shadow.mapSize.set(2048,2048);
+    sun.shadow.camera.near=1; sun.shadow.camera.far=250;
+    sun.shadow.camera.left=-60; sun.shadow.camera.right=60;
+    sun.shadow.camera.top=60; sun.shadow.camera.bottom=-60;
+    sun.shadow.bias=-.0003;
   }
   scene.add(sun);
-  scene.add(new THREE.HemisphereLight(0x8EB5C8, 0x3a5a3a, 0.55));
-  scene.add(new THREE.AmbientLight(0x404850, 0.3));
+  scene.add(new THREE.HemisphereLight(0xB0D0E0,0x6a8a5a,.7));
+  scene.add(new THREE.AmbientLight(0x607080,.5));
 
-  // Skybox-like background gradient
   createSky();
   createWater();
+  createFoamParticles();
   createKayak();
 
-  window.addEventListener('resize', onResize);
+  window.addEventListener('resize',onResize);
   setupInput();
   setupMenuEvents();
   animate();
 }
 
 /* ═══════════════════════════════════════════════
-   SKY
+   SKY DOME
    ═══════════════════════════════════════════════ */
-function createSky() {
-  const skyGeo = new THREE.SphereGeometry(400, 32, 16);
-  const skyMat = new THREE.ShaderMaterial({
-    side: THREE.BackSide,
-    uniforms: {},
-    vertexShader: `
-      varying vec3 vWP;
-      void main() {
-        vWP = (modelMatrix * vec4(position, 1.0)).xyz;
-        gl_Position = projectionMatrix * viewMatrix * vec4(vWP, 1.0);
-      }
-    `,
-    fragmentShader: `
-      varying vec3 vWP;
-      void main() {
-        float h = normalize(vWP).y;
-        vec3 sky = mix(vec3(0.65, 0.75, 0.82), vec3(0.35, 0.55, 0.78), clamp(h * 2.0, 0.0, 1.0));
-        // Hazy horizon
-        sky = mix(vec3(0.75, 0.80, 0.82), sky, smoothstep(-0.02, 0.15, h));
-        gl_FragColor = vec4(sky, 1.0);
-      }
-    `
+function createSky(){
+  const g=new THREE.SphereGeometry(450,32,16);
+  const m=new THREE.ShaderMaterial({
+    side:THREE.BackSide, depthWrite:false,
+    vertexShader:`varying vec3 vP;void main(){vP=position;gl_Position=projectionMatrix*viewMatrix*modelMatrix*vec4(position,1.);}`,
+    fragmentShader:`
+      varying vec3 vP;
+      void main(){
+        float h=normalize(vP).y;
+        vec3 top=vec3(.38,.58,.82);
+        vec3 hor=vec3(.78,.82,.86);
+        vec3 c=mix(hor,top,clamp(h*2.5,0.,1.));
+        // subtle warm glow near horizon
+        c+=vec3(.12,.08,.02)*exp(-abs(h)*8.);
+        gl_FragColor=vec4(c,1.);
+      }`
   });
-  const sky = new THREE.Mesh(skyGeo, skyMat);
-  scene.add(sky);
+  scene.add(new THREE.Mesh(g,m));
 }
 
 /* ═══════════════════════════════════════════════
-   WATER MESH & SHADER
+   WATER  — single large plane, shader does all work
    ═══════════════════════════════════════════════ */
-function createWater() {
-  const lenZ = (CHUNKS_AHEAD + CHUNKS_BEHIND + 1) * CHUNK_SIZE;
-  const segZ = Math.floor(lenZ * (isMobile ? 1.2 : 2));
-  const segX = isMobile ? 30 : 50;
-  const maxW = RIVER_BASE_WIDTH + 12;
+function createWater(){
+  const lenZ=(CHUNKS_FWD+CHUNKS_BACK+2)*CHUNK_LEN;
+  const segZ=isMobile?Math.floor(lenZ*1.0):Math.floor(lenZ*1.8);
+  const segX=isMobile?28:48;
+  const geo=new THREE.PlaneGeometry(WATER_WIDTH,lenZ,segX,segZ);
+  geo.rotateX(-Math.PI/2);
 
-  const geo = new THREE.PlaneGeometry(maxW * 1.5, lenZ, segX, segZ);
-  geo.rotateX(-Math.PI / 2);
+  // GLSL river functions — must mirror the JS versions exactly
+  const glslRiver=`
+    float rCX(float z){return 12.*sin(z*.006)+6.*sin(z*.017+1.3)+3.*sin(z*.037+2.7)+1.8*sin(z*.063+.8);}
+    float rW(float z){return ${RIVER_W_BASE.toFixed(1)}+4.*sin(z*.012+.5)+2.5*sin(z*.029+1.8)+1.5*sin(z*.053+3.1);}
+    float rBY(float z){return -z*.016+.9*sin(z*.008+.4)+.35*sin(z*.026+1.1)+.5*sin(z*.045+1.7);}
+    float rG(float z){float e=.5;return (rBY(z+e)-rBY(z-e))/(2.*e);}
+    vec2 rT(float z){float e=.5;float dx=rCX(z+e)-rCX(z-e);float dz=2.*e;float l=length(vec2(dx,dz));return vec2(dx,dz)/l;}
+  `;
 
-  const mat = new THREE.ShaderMaterial({
-    uniforms: {
-      uTime: { value: 0 },
-      uPlayerZ: { value: 0 },
-      uSunDir: { value: new THREE.Vector3(0.4, 0.7, 0.5).normalize() },
-      fogColor: { value: scene.fog.color },
-      fogDensity: { value: scene.fog.density }
+  const mat=new THREE.ShaderMaterial({
+    uniforms:{
+      uTime:{value:0}, uPZ:{value:0},
+      uSun:{value:new THREE.Vector3(.4,.7,.5).normalize()},
+      fogColor:{value:new THREE.Color(0x9ab8c8)}, fogDens:{value:.004}
     },
-    vertexShader: `
-      uniform float uTime;
-      uniform float uPlayerZ;
+    vertexShader:`
+      uniform float uTime,uPZ;
       varying vec3 vWP;
       varying vec3 vN;
-      varying float vTurb;
-      varying float vDepth;
+      varying float vTurb,vDepth;
+      varying vec2 vFlow;
+      ${glslRiver}
+      void main(){
+        float z=position.z+uPZ;
+        float cx=rCX(z), w=rW(z), hw=w*.5;
+        float wx=position.x+cx;
+        float fc=abs(wx-cx)/hw;
 
-      // River path functions (replicated in shader)
-      float riverCenterX(float z) {
-        return 10.0 * sin(z * 0.007) +
-               5.0 * sin(z * 0.019 + 1.3) +
-               3.0 * sin(z * 0.039 + 2.7) +
-               1.5 * sin(z * 0.071 + 0.8);
-      }
-      float riverWidth(float z) {
-        return ${RIVER_BASE_WIDTH.toFixed(1)} +
-               3.5 * sin(z * 0.013 + 0.5) +
-               2.0 * sin(z * 0.031 + 1.8) +
-               1.5 * sin(z * 0.057 + 3.1);
-      }
-      float riverBaseY(float z) {
-        return -z * 0.018 +
-               0.8 * sin(z * 0.009 + 0.4) +
-               0.3 * sin(z * 0.028 + 1.1);
-      }
-      float riverGradient(float z) {
-        float e = 0.5;
-        return (riverBaseY(z + e) - riverBaseY(z - e)) / (2.0 * e);
-      }
-      bool isRapidsF(float z) {
-        return riverGradient(z) < -0.025;
-      }
-
-      void main() {
-        // Position the water mesh around the player
-        vec3 basePos = position;
-        basePos.z += uPlayerZ;
-
-        float z = basePos.z;
-        float cx = riverCenterX(z);
-        float w = riverWidth(z);
-
-        // Shift X to follow river center
-        float localX = basePos.x + cx;
-
-        // Check if inside river
-        float halfW = w * 0.5;
-        float fromCenter = abs(localX - cx) / halfW;
-
-        // Water height
-        float h = riverBaseY(z);
-
-        // Flow tangent
-        float e2 = 0.5;
-        float tdx = riverCenterX(z + e2) - riverCenterX(z - e2);
-        float tdz = 2.0 * e2;
-        float tlen = length(vec2(tdx, tdz));
-        vec2 tang = vec2(tdx, tdz) / tlen;
-
-        float flowPhase = tang.x * localX + tang.y * z;
+        float h=rBY(z);
+        vec2 tg=rT(z);
+        float fp=tg.x*wx+tg.y*z;
+        bool rap=rG(z)<-.018;
 
         // Ripples
-        h += 0.06 * sin(flowPhase * 1.8 - uTime * 3.5);
-        h += 0.03 * sin(flowPhase * 3.2 + localX * 0.7 - uTime * 4.2);
-
-        // Rapids standing waves
-        bool rap = isRapidsF(z);
-        if (rap) {
-          h += 0.18 * sin(z * 1.2 - uTime * 0.5) * cos(localX * 0.3);
-          h += 0.10 * sin(z * 2.5 + uTime * 0.3);
+        h+=.06*sin(fp*1.8-uTime*3.5)+.03*sin(fp*3.2+wx*.7-uTime*4.2);
+        if(rap){
+          h+=.22*sin(z*1.1-uTime*.5)*cos(wx*.3);
+          h+=.12*sin(z*2.4+uTime*.3);
         }
+        h+=.02*sin(wx*2.1+z*.5-uTime*2.8)+.015*sin(wx*3.5-z*.8+uTime*3.1);
 
-        // Cross ripples
-        h += 0.02 * sin(localX * 2.1 + z * 0.5 - uTime * 2.8);
-        h += 0.015 * sin(localX * 3.5 - z * 0.8 + uTime * 3.1);
+        // Bank masking
+        float bankF=smoothstep(.90,1.02,fc);
+        h=mix(h,h-4.,bankF);
 
-        // Bank masking: push vertices outside river below surface
-        float bankFade = smoothstep(0.92, 1.05, fromCenter);
-        h = mix(h, h - 3.0, bankFade);
+        vec3 d=vec3(wx,h,z);
 
-        vec3 displaced = vec3(localX, h, z);
+        // Finite-diff normal
+        float e=.25;
+        float hx1=rBY(z)+.06*sin((tg.x*(wx+e)+tg.y*z)*1.8-uTime*3.5);
+        float hz1=rBY(z+e)+.06*sin((tg.x*wx+tg.y*(z+e))*1.8-uTime*3.5);
+        vec3 nn=normalize(vec3(-(hx1-h)/e,1.,-(hz1-h)/e));
 
-        // Normal computation via finite differences
-        float e3 = 0.3;
-        // Approximate normal
-        float hpx = riverBaseY(z) + 0.06 * sin((tang.x * (localX + e3) + tang.y * z) * 1.8 - uTime * 3.5);
-        float hpz = riverBaseY(z + e3) + 0.06 * sin((tang.x * localX + tang.y * (z + e3)) * 1.8 - uTime * 3.5);
-        vec3 normal = normalize(vec3(-(hpx - h) / e3, 1.0, -(hpz - h) / e3));
-
-        vWP = displaced;
-        vN = normal;
-        vTurb = rap ? 0.6 : 0.0;
-        vTurb += smoothstep(0.7, 0.95, fromCenter) * 0.3;
-        vDepth = 1.0 - fromCenter;
-
-        gl_Position = projectionMatrix * viewMatrix * vec4(displaced, 1.0);
+        vWP=d; vN=nn;
+        vTurb=rap ? 0.65 : 0.0;
+        vTurb+=smoothstep(.7,.92,fc)*.35;
+        vDepth=clamp(1.-fc,0.,1.);
+        vFlow=tg;
+        gl_Position=projectionMatrix*viewMatrix*vec4(d,1.);
       }
     `,
-    fragmentShader: `
-      uniform vec3 uSunDir;
+    fragmentShader:`
       uniform float uTime;
-      uniform vec3 fogColor;
-      uniform float fogDensity;
-      varying vec3 vWP;
-      varying vec3 vN;
-      varying float vTurb;
-      varying float vDepth;
+      uniform vec3 uSun,fogColor;
+      uniform float fogDens;
+      varying vec3 vWP,vN;
+      varying float vTurb,vDepth;
+      varying vec2 vFlow;
 
-      // Simple noise for foam
-      float hash(float n) { return fract(sin(n) * 43758.5453); }
-      float noise(vec2 p) {
-        vec2 i = floor(p);
-        vec2 f = fract(p);
-        f = f * f * (3.0 - 2.0 * f);
-        float n = i.x + i.y * 57.0;
-        return mix(mix(hash(n), hash(n+1.0), f.x), mix(hash(n+57.0), hash(n+58.0), f.x), f.y);
+      float rBY_a(float z){return -z*.016+.9*sin(z*.008+.4)+.35*sin(z*.026+1.1)+.5*sin(z*.045+1.7);}
+      float H(float n){return fract(sin(n)*43758.5453);}
+      float N(vec2 p){
+        vec2 i=floor(p),f=fract(p);
+        f=f*f*(3.-2.*f);
+        float n=i.x+i.y*157.;
+        return mix(mix(H(n),H(n+1.),f.x),mix(H(n+157.),H(n+158.),f.x),f.y);
       }
+      float fbm(vec2 p){return N(p)*.5+N(p*2.1+3.7)*.25+N(p*4.3+7.1)*.125;}
 
-      void main() {
-        // River water colors
-        vec3 shallow = vec3(0.15, 0.45, 0.35);  // Green-teal
-        vec3 deep    = vec3(0.04, 0.12, 0.18);  // Dark blue-green
-        vec3 rapids  = vec3(0.25, 0.50, 0.45);  // Lighter turbulent
+      void main(){
+        vec2 flowUV=vWP.xz+vFlow*uTime*1.8;
 
-        float depthF = clamp(vDepth, 0.0, 1.0);
-        vec3 col = mix(shallow, deep, depthF * 0.6);
+        // Base water colour — depth-dependent
+        vec3 shallow=vec3(.25,.58,.48);
+        vec3 deep=vec3(.06,.18,.24);
+        vec3 col=mix(shallow,deep,vDepth*.55+.15);
 
-        // Rapids coloring
-        col = mix(col, rapids, vTurb * 0.4);
+        // Flow-aligned surface variation
+        float surf=fbm(flowUV*1.2)*.12;
+        col+=surf*vec3(.04,.06,.03);
 
-        // Foam / white-water
-        float foamNoise = noise(vWP.xz * 2.5 + uTime * vec2(0.3, 1.2));
-        float foam = smoothstep(0.4, 0.7, vTurb + foamNoise * 0.3);
-        foam += smoothstep(0.15, 0.35, vWP.y - (-vWP.z * 0.018 + 0.8 * sin(vWP.z * 0.009 + 0.4))) * 0.3;
-        // Animated foam streaks
-        float streak = noise(vec2(vWP.x * 1.5, vWP.z * 0.8 - uTime * 2.0));
-        foam += streak * vTurb * 0.4;
-        foam = clamp(foam, 0.0, 1.0);
-        col = mix(col, vec3(0.85, 0.92, 0.95), foam * 0.7);
+        // Foam & whitewater
+        float foamN=fbm(flowUV*2.8)+fbm(vec2(vWP.x*1.2,vWP.z*.6-uTime*2.5))*.5;
+        float foam=smoothstep(.35,.75,foamN*.6+vTurb*.55);
+        // Standing-wave crests
+        float crest=smoothstep(.12,.32,vWP.y-rBY_a(vWP.z));
+        foam=max(foam,crest*.6);
+        // Foam streaks along flow
+        float streak=N(vec2(vWP.x*2.5,vWP.z*.5-uTime*3.))*vTurb*.4;
+        foam=clamp(foam+streak,0.,1.);
+        col=mix(col,vec3(.88,.94,.97),foam*.75);
 
-        // Diffuse lighting
-        vec3 n = normalize(vN);
-        float diff = max(dot(n, uSunDir), 0.0);
-        col *= 0.35 + 0.65 * diff;
+        // Diffuse
+        vec3 n=normalize(vN);
+        float diff=max(dot(n,uSun),0.);
+        col*=.32+.68*diff;
 
         // Specular
-        vec3 vd = normalize(cameraPosition - vWP);
-        vec3 hd = normalize(uSunDir + vd);
-        float spec = pow(max(dot(n, hd), 0.0), 60.0);
-        col += vec3(1.0, 0.95, 0.82) * spec * 0.5;
+        vec3 vd=normalize(cameraPosition-vWP);
+        vec3 hd=normalize(uSun+vd);
+        col+=vec3(1.,.95,.82)*pow(max(dot(n,hd),0.),80.)*.55;
 
         // Fresnel
-        float fres = pow(1.0 - max(dot(n, vd), 0.0), 3.5);
-        col = mix(col, vec3(0.45, 0.60, 0.55), fres * 0.3);
+        float fres=pow(1.-max(dot(n,vd),0.),3.5);
+        col=mix(col,vec3(.48,.62,.58),fres*.32);
 
         // Fog
-        float fd = length(vWP - cameraPosition);
-        float ff = 1.0 - exp(-fogDensity * fogDensity * fd * fd);
-        col = mix(col, fogColor.rgb, ff);
+        float fd=length(vWP-cameraPosition);
+        col=mix(col,fogColor,1.-exp(-fogDens*fogDens*fd*fd));
 
-        gl_FragColor = vec4(col, 0.92);
+        gl_FragColor=vec4(col,.94);
       }
     `,
-    transparent: true,
-    side: THREE.DoubleSide,
-    depthWrite: true
+    transparent:true, side:THREE.DoubleSide, depthWrite:true
   });
-
-  waterMesh = new THREE.Mesh(geo, mat);
+  waterMesh=new THREE.Mesh(geo,mat);
   scene.add(waterMesh);
 }
 
 /* ═══════════════════════════════════════════════
-   CHUNK GENERATION — Banks, Rocks, Trees
+   FOAM / SPRAY PARTICLES
    ═══════════════════════════════════════════════ */
-function generateChunk(chunkIdx) {
-  if (chunks.has(chunkIdx)) return;
+const FOAM_COUNT=isMobile?120:300;
+let foamGeo, foamPositions, foamVelocities, foamLifes;
 
-  const group = new THREE.Group();
-  const startZ = chunkIdx * CHUNK_SIZE;
-  const endZ = startZ + CHUNK_SIZE;
-
-  // Materials
-  const rockMat = new THREE.MeshPhongMaterial({
-    color: 0x5a5a52,
-    specular: 0x222222,
-    shininess: 10,
-    flatShading: true
-  });
-  const rockMat2 = new THREE.MeshPhongMaterial({
-    color: 0x6b6358,
-    specular: 0x1a1a1a,
-    shininess: 8,
-    flatShading: true
-  });
-  const darkRockMat = new THREE.MeshPhongMaterial({
-    color: 0x3a3834,
-    specular: 0x111111,
-    shininess: 6,
-    flatShading: true
-  });
-  const groundMat = new THREE.MeshPhongMaterial({
-    color: 0x4a6a3a,
-    specular: 0x111111,
-    shininess: 5,
-    flatShading: true
-  });
-
-  // Generate bank walls
-  generateBanks(group, startZ, endZ, rockMat, rockMat2, groundMat);
-
-  // Generate rocks in the river
-  generateRiverRocks(group, startZ, endZ, darkRockMat, rockMat2);
-
-  // Generate trees on banks
-  generateTrees(group, startZ, endZ);
-
-  // Generate ground/hillside
-  generateGroundPlanes(group, startZ, endZ, groundMat);
-
-  group.userData.chunkIdx = chunkIdx;
-  scene.add(group);
-  chunks.set(chunkIdx, group);
+function createFoamParticles(){
+  foamGeo=new THREE.BufferGeometry();
+  foamPositions=new Float32Array(FOAM_COUNT*3);
+  foamVelocities=new Float32Array(FOAM_COUNT*3);
+  foamLifes=new Float32Array(FOAM_COUNT);
+  for(let i=0;i<FOAM_COUNT;i++){
+    foamPositions[i*3]=0; foamPositions[i*3+1]=-50; foamPositions[i*3+2]=0;
+    foamLifes[i]=0;
+  }
+  foamGeo.setAttribute('position',new THREE.BufferAttribute(foamPositions,3));
+  const mat=new THREE.PointsMaterial({color:0xeeffff,size:.18,transparent:true,opacity:.7,depthWrite:false,sizeAttenuation:true});
+  foamParticles=new THREE.Points(foamGeo,mat);
+  scene.add(foamParticles);
 }
 
-function generateBanks(group, startZ, endZ, rockMat, rockMat2, groundMat) {
-  const step = 2.5;
-
-  for (let z = startZ; z < endZ; z += step) {
-    const cx = riverCenterX(z);
-    const w = riverWidth(z);
-    const halfW = w * 0.5;
-    const baseH = riverBaseY(z);
-
-    // Left bank
-    createBankSegment(group, cx - halfW, z, step, baseH, -1, rockMat, rockMat2);
-    // Right bank
-    createBankSegment(group, cx + halfW, z, step, baseH, 1, rockMat, rockMat2);
+function updateFoam(dt,t){
+  let emitIdx=0;
+  for(let i=0;i<FOAM_COUNT;i++){
+    if(foamLifes[i]>0){
+      foamLifes[i]-=dt;
+      foamPositions[i*3]+=foamVelocities[i*3]*dt;
+      foamPositions[i*3+1]+=foamVelocities[i*3+1]*dt;
+      foamPositions[i*3+2]+=foamVelocities[i*3+2]*dt;
+      foamVelocities[i*3+1]-=2.5*dt; // gravity
+      if(foamLifes[i]<=0) foamPositions[i*3+1]=-50;
+    }
   }
+
+  // Emit near rapids and rocks close to player
+  const emitRate=isRapids(S.posZ)?8:2;
+  for(let e=0;e<emitRate;e++){
+    // Find dead particle
+    let found=-1;
+    for(let j=0;j<FOAM_COUNT;j++){
+      emitIdx=(emitIdx+1)%FOAM_COUNT;
+      if(foamLifes[emitIdx]<=0){found=emitIdx;break;}
+    }
+    if(found<0)continue;
+    const i=found;
+    // Emit around player in rapids or near rocks
+    const ox=(Math.random()-.5)*8;
+    const oz=S.posZ+(Math.random()-.5)*12;
+    const cx=rCenterX(oz),w=rWidth(oz);
+    const ex=cx+ox;
+    if(Math.abs(ex-cx)>w*.45)continue;
+    const ey=waterH(ex,oz,t);
+    foamPositions[i*3]=ex;
+    foamPositions[i*3+1]=ey+.05+Math.random()*.15;
+    foamPositions[i*3+2]=oz;
+    const tg=rTangent(oz);
+    foamVelocities[i*3]=tg.x*.3+(Math.random()-.5)*.4;
+    foamVelocities[i*3+1]=.3+Math.random()*.6;
+    foamVelocities[i*3+2]=tg.z*.3+(Math.random()-.5)*.4;
+    foamLifes[i]=.4+Math.random()*.6;
+  }
+  foamGeo.attributes.position.needsUpdate=true;
 }
 
-function createBankSegment(group, x, z, depth, baseH, side, rockMat, rockMat2) {
-  // Rocky cliff face
-  const h = BANK_HEIGHT + hash2(x * 0.1, z * 0.1) * 3;
-  const w = 2.5 + hash2(x * 0.3, z * 0.2) * 2;
+/* ═══════════════════════════════════════════════
+   CHUNK SYSTEM  — canyon walls, rocks, trees, ground
+   ═══════════════════════════════════════════════ */
+function genChunk(ci){
+  if(chunks.has(ci))return;
+  const grp=new THREE.Group();
+  const z0=ci*CHUNK_LEN, z1=z0+CHUNK_LEN;
 
-  // Main cliff block
-  const geo = new THREE.BoxGeometry(w, h, depth);
-  const pos = geo.attributes.position;
-  for (let i = 0; i < pos.count; i++) {
-    // Roughen the surface
-    const px = pos.getX(i) + hash2(i * 7.1, z * 0.01) * 0.4;
-    const py = pos.getY(i) + hash2(i * 3.3, z * 0.02) * 0.3;
-    const pz = pos.getZ(i) + hash2(i * 5.7, z * 0.03) * 0.3;
-    pos.setX(i, px);
-    pos.setY(i, py);
-    pos.setZ(i, pz);
+  // Canyon walls
+  genCanyonWall(grp,z0,z1,-1);
+  genCanyonWall(grp,z0,z1, 1);
+
+  // Ground above walls
+  genGround(grp,z0,z1,-1);
+  genGround(grp,z0,z1, 1);
+
+  // River rocks
+  genRocks(grp,z0,z1);
+
+  // Stopper zones at steep drops
+  genStoppers(z0,z1);
+
+  // Trees
+  genTrees(grp,z0,z1);
+
+  // Grass tufts on banks
+  genBushes(grp,z0,z1);
+
+  grp.userData.ci=ci;
+  scene.add(grp);
+  chunks.set(ci,grp);
+}
+
+/* ── Canyon wall as continuous BufferGeometry ── */
+function genCanyonWall(grp,z0,z1,side){
+  const stepZ=2, stepsZ=Math.ceil((z1-z0)/stepZ);
+  const hSteps=6;
+  const verts=[],cols=[],idxs=[];
+  const vPerRow=hSteps+1;
+
+  for(let iz=0;iz<=stepsZ;iz++){
+    const z=z0+iz*stepZ;
+    const cx=rCenterX(z),w=rWidth(z),hw=w*.5;
+    const by=rBaseY(z);
+    const edgeX=cx+side*hw;
+    const wallH=BANK_H+hash2(z*.07,side*17)*3;
+
+    for(let iy=0;iy<=hSteps;iy++){
+      const t=iy/hSteps;
+      const y=by-.3+t*(wallH+1);
+      // Rock surface roughness
+      const nx=hash2(z*.13+iy*7.1,side*31)*.8-.4;
+      const overhang=t>.7?(t-.7)*1.5*hash2(z*.09,iy*3.3):0;
+      const x=edgeX+side*(nx+overhang);
+      verts.push(x,y,z);
+
+      // Vertex colors: dark wet rock at base, drier up, moss near top
+      const wet=sStep(0,.2,t);
+      const moss=sStep(.6,.9,t)*hash2(z*.15,iy*.7);
+      const r=lerp(.38,.58,wet)+hash2(z*.11,iy*2.3)*.1-moss*.08;
+      const g=lerp(.35,.52,wet)+hash2(z*.13,iy*2.7)*.08+moss*.2;
+      const b=lerp(.32,.48,wet)+hash2(z*.17,iy*3.1)*.06;
+      cols.push(r,g,b);
+    }
   }
+
+  for(let iz=0;iz<stepsZ;iz++){
+    for(let iy=0;iy<hSteps;iy++){
+      const a=iz*vPerRow+iy, b=a+1, c=a+vPerRow, d=c+1;
+      if(side>0) idxs.push(a,c,b, b,c,d);
+      else       idxs.push(a,b,c, b,d,c);
+    }
+  }
+
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
+  geo.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));
+  geo.setIndex(idxs);
   geo.computeVertexNormals();
 
-  const mat = hash2(x, z) > 0.5 ? rockMat : rockMat2;
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.set(x + side * w * 0.5, baseH + h * 0.4, z + depth * 0.5);
-  if (!isMobile) {
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  }
-  group.add(mesh);
+  const mat=new THREE.MeshPhongMaterial({
+    vertexColors:true, specular:0x222222, shininess:8, flatShading:true
+  });
+  const mesh=new THREE.Mesh(geo,mat);
+  if(!isMobile){mesh.castShadow=true;mesh.receiveShadow=true;}
+  grp.add(mesh);
 
-  // Additional rocky outcrops
-  if (hash2(x * 0.7, z * 0.5) > 0.4) {
-    const oGeo = new THREE.DodecahedronGeometry(0.6 + hash2(z * 0.1, x * 0.2) * 1.2, 0);
-    const oMesh = new THREE.Mesh(oGeo, rockMat);
-    oMesh.position.set(
-      x + side * (0.3 + hash2(x, z * 0.3) * 1.5),
-      baseH + hash2(z * 0.2, x * 0.1) * h * 0.6,
-      z + hash2(x * 0.5, z * 0.7) * depth
+  // Rocky outcrops along the wall
+  for(let z=z0+3;z<z1;z+=4+hash(z*0.3)*3){
+    if(hash2(z*.23,side*7)>.45)continue;
+    const cx2=rCenterX(z),w2=rWidth(z),hw2=w2*.5;
+    const baseY=rBaseY(z);
+    const sz=.5+hash2(z*.31,side*11)*1.5;
+    const og=new THREE.DodecahedronGeometry(sz,0);
+    const p=og.attributes.position;
+    for(let i=0;i<p.count;i++) p.setY(i,p.getY(i)*.55);
+    og.computeVertexNormals();
+    const om=new THREE.Mesh(og,new THREE.MeshPhongMaterial({
+      color:new THREE.Color(.48+hash(z*.4)*.15, .45+hash(z*.5)*.12, .40+hash(z*.6)*.10),
+      flatShading:true, specular:0x222222, shininess:6
+    }));
+    om.position.set(
+      cx2+side*(hw2-sz*.3+hash(z*.7)*.8),
+      baseY+hash(z*.8)*2,
+      z
     );
-    oMesh.rotation.set(hash(z) * 1.5, hash(x) * 1.5, hash(x + z) * 1.5);
-    if (!isMobile) oMesh.castShadow = true;
-    group.add(oMesh);
+    om.rotation.set(hash(z*1.1)*.6,hash(z*1.2)*3,hash(z*1.3)*.4);
+    if(!isMobile)om.castShadow=true;
+    grp.add(om);
   }
 }
 
-function generateRiverRocks(group, startZ, endZ, darkRockMat, rockMat2) {
-  // Place rocks in the river
-  for (let z = startZ + 3; z < endZ - 3; z += 5) {
-    const cx = riverCenterX(z);
-    const w = riverWidth(z);
-    const seed = hash2(z * 0.13, 42.7);
+/* ── Ground / hillside above canyon walls ── */
+function genGround(grp,z0,z1,side){
+  const segs=8, segZ=Math.ceil((z1-z0)/4);
+  const geo=new THREE.PlaneGeometry(35,z1-z0,segs,segZ);
+  geo.rotateX(-Math.PI/2);
+  const pos=geo.attributes.position, col=new Float32Array(pos.count*3);
 
-    // Probability of a rock: higher in rapids
-    const rockProb = isRapids(z) ? 0.7 : 0.35;
-    if (seed > rockProb) continue;
+  for(let i=0;i<pos.count;i++){
+    const lz=pos.getZ(i)+z0+(z1-z0)*.5;
+    const cx=rCenterX(lz),w=rWidth(lz),hw=w*.5;
+    const by=rBaseY(lz);
+    const gx=pos.getX(i)*side+cx+side*(hw+17);
+    const gy=by+BANK_H*.6+hash2(gx*.05,lz*.05)*3.5;
+    pos.setX(i,gx); pos.setY(i,gy); pos.setZ(i,lz);
 
-    // Position within river (avoid very center and very edge)
-    const lateralPos = (hash2(z * 0.37, 13.1) - 0.5) * w * 0.65;
-    const rx = cx + lateralPos;
-    const rz = z + (hash(z * 0.7) - 0.5) * 4;
-    const baseH = riverBaseY(rz);
+    // Ground color
+    const gf=hash2(gx*.08,lz*.08);
+    col[i*3]=.38+gf*.15;
+    col[i*3+1]=.52+gf*.18;
+    col[i*3+2]=.28+gf*.10;
+  }
+  geo.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
+  geo.computeVertexNormals();
 
-    const size = 0.4 + hash2(z * 0.23, 7.7) * 1.2;
-    const above = size * (0.3 + hash(z * 0.31) * 0.5); // How much above water
+  const m=new THREE.Mesh(geo,new THREE.MeshPhongMaterial({
+    vertexColors:true,flatShading:true,specular:0x111111,shininess:4
+  }));
+  if(!isMobile)m.receiveShadow=true;
+  grp.add(m);
+}
 
-    // Rock mesh
-    const detail = size > 1.0 ? 1 : 0;
-    const geo = new THREE.DodecahedronGeometry(size, detail);
-    // Flatten slightly
-    const pos = geo.attributes.position;
-    for (let i = 0; i < pos.count; i++) {
-      pos.setY(i, pos.getY(i) * 0.6);
-      pos.setX(i, pos.getX(i) + hash2(i * 3.1, rz * 0.01) * 0.15);
-      pos.setZ(i, pos.getZ(i) + hash2(i * 5.3, rz * 0.02) * 0.15);
+/* ── River rocks ── */
+function genRocks(grp,z0,z1){
+  for(let z=z0+2;z<z1-2;z+=4){
+    const cx=rCenterX(z),w=rWidth(z);
+    const seed=hash2(z*.13,42.7);
+    const prob=isRapids(z)?.72:.3;
+    if(seed>prob)continue;
+
+    const lat=(hash2(z*.37,13.1)-.5)*w*.6;
+    const rx=cx+lat, rz=z+(hash(z*.7)-.5)*3;
+    const by=rBaseY(rz);
+    const sz=.5+hash2(z*.23,7.7)*1.3;
+    const above=sz*(.25+hash(z*.31)*.5);
+
+    const geo=new THREE.DodecahedronGeometry(sz,hash(z)>.5?1:0);
+    const p=geo.attributes.position;
+    for(let i=0;i<p.count;i++){
+      p.setY(i,p.getY(i)*.55);
+      p.setX(i,p.getX(i)+(hash2(i*3.1,rz*.01)-.5)*.2);
+      p.setZ(i,p.getZ(i)+(hash2(i*5.3,rz*.02)-.5)*.2);
     }
     geo.computeVertexNormals();
 
-    const mat = hash(z * 0.5) > 0.5 ? darkRockMat : rockMat2;
-    const rock = new THREE.Mesh(geo, mat);
-    rock.position.set(rx, baseH + above * 0.5, rz);
-    rock.rotation.set(hash(z) * 0.5, hash(z + 1) * Math.PI * 2, hash(z + 2) * 0.3);
-    if (!isMobile) {
-      rock.castShadow = true;
-      rock.receiveShadow = true;
-    }
-    group.add(rock);
+    const gray=.38+hash(z*.5)*.18;
+    const mat=new THREE.MeshPhongMaterial({
+      color:new THREE.Color(gray,gray+.02,gray-.02),
+      flatShading:true, specular:0x222222, shininess:8
+    });
+    const rock=new THREE.Mesh(geo,mat);
+    rock.position.set(rx,by+above*.4,rz);
+    rock.rotation.set(hash(z)*.4,hash(z+1)*6.28,hash(z+2)*.3);
+    if(!isMobile){rock.castShadow=true;rock.receiveShadow=true;}
+    grp.add(rock);
 
-    // Add to colliders
-    rockColliders.push({ x: rx, z: rz, radius: size * 0.9 });
+    colliders.push({x:rx,z:rz,r:sz*.85});
 
-    // Create eddy behind the rock (downstream)
-    if (size > 0.7) {
-      const tang = riverTangent(rz);
-      eddyZones.push({
-        x: rx + tang.x * size * 2.2,
-        z: rz + tang.z * size * 2.2,
-        radius: size * 2.5,
-        strength: size * 0.6,
-        angle: 0
-      });
+    // Eddy behind large rocks
+    if(sz>.8){
+      const tg=rTangent(rz);
+      eddies.push({x:rx+tg.x*sz*2.5,z:rz+tg.z*sz*2.5,r:sz*3,str:sz*.5});
     }
 
-    // Sometimes add a second smaller rock nearby
-    if (hash2(z * 0.19, 33.3) > 0.55) {
-      const s2 = size * 0.5;
-      const geo2 = new THREE.DodecahedronGeometry(s2, 0);
-      const pos2 = geo2.attributes.position;
-      for (let i = 0; i < pos2.count; i++) pos2.setY(i, pos2.getY(i) * 0.55);
-      geo2.computeVertexNormals();
-      const r2 = new THREE.Mesh(geo2, mat);
-      r2.position.set(
-        rx + (hash(z * 1.1) - 0.5) * 2,
-        baseH + s2 * 0.3,
-        rz + (hash(z * 1.3) - 0.5) * 2
-      );
-      r2.rotation.set(hash(z * 2) * 1, hash(z * 3) * 2, 0);
-      if (!isMobile) r2.castShadow = true;
-      group.add(r2);
-      rockColliders.push({
-        x: r2.position.x,
-        z: r2.position.z,
-        radius: s2 * 0.8
-      });
+    // Companion rock
+    if(hash2(z*.19,33.3)>.5){
+      const s2=sz*.45;
+      const g2=new THREE.DodecahedronGeometry(s2,0);
+      const p2=g2.attributes.position;
+      for(let i=0;i<p2.count;i++) p2.setY(i,p2.getY(i)*.5);
+      g2.computeVertexNormals();
+      const r2=new THREE.Mesh(g2,mat.clone());
+      r2.position.set(rx+(hash(z*1.1)-.5)*2.5,by+s2*.3,rz+(hash(z*1.3)-.5)*2.5);
+      r2.rotation.set(hash(z*2)*1,hash(z*3)*3,0);
+      if(!isMobile)r2.castShadow=true;
+      grp.add(r2);
+      colliders.push({x:r2.position.x,z:r2.position.z,r:s2*.8});
     }
   }
 }
 
-function generateTrees(group, startZ, endZ) {
-  const trunkMat = new THREE.MeshPhongMaterial({ color: 0x5a3a20 });
-  const leafMats = [
-    new THREE.MeshPhongMaterial({ color: 0x2a6a2a, flatShading: true }),
-    new THREE.MeshPhongMaterial({ color: 0x3a7a35, flatShading: true }),
-    new THREE.MeshPhongMaterial({ color: 0x1d5a25, flatShading: true })
+/* ── Stopper zones at steep gradient changes ── */
+function genStoppers(z0,z1){
+  for(let z=z0+5;z<z1-5;z+=3){
+    const g=rGrad(z);
+    if(g<-.028){
+      const cx=rCenterX(z),w=rWidth(z);
+      // Check not already registered
+      let dup=false;
+      for(const s of stoppers) if(Math.abs(s.zMin-z)<6){dup=true;break;}
+      if(!dup) stoppers.push({zMin:z-1.5,zMax:z+3,cx,w:w*.7});
+    }
+  }
+}
+
+/* ── Trees ── */
+const treeMats={};
+function getTreeMats(){
+  if(treeMats.trunk)return treeMats;
+  treeMats.trunk=new THREE.MeshPhongMaterial({color:0x4a2f18});
+  treeMats.leaves=[
+    new THREE.MeshPhongMaterial({color:0x2d7a35,flatShading:true}),
+    new THREE.MeshPhongMaterial({color:0x3a8a3a,flatShading:true}),
+    new THREE.MeshPhongMaterial({color:0x4a9a45,flatShading:true})
   ];
+  return treeMats;
+}
 
-  for (let z = startZ; z < endZ; z += 3) {
-    const cx = riverCenterX(z);
-    const w = riverWidth(z);
-    const halfW = w * 0.5;
-    const baseH = riverBaseY(z);
+function genTrees(grp,z0,z1){
+  const tm=getTreeMats();
+  for(let z=z0;z<z1;z+=2.5){
+    const cx=rCenterX(z),w=rWidth(z),hw=w*.5,by=rBaseY(z);
 
-    // Left bank trees
-    if (hash2(z * 0.17, 22.1) > 0.35) {
-      const tx = cx - halfW - 2 - hash(z * 0.41) * 5;
-      createTree(group, tx, baseH + BANK_HEIGHT * 0.5 + hash(z * 0.51) * 2, z + hash(z * 0.61) * 3, trunkMat, leafMats, hash(z * 0.71));
+    // Left bank
+    if(hash2(z*.17,22.1)>.3){
+      const tx=cx-hw-2.5-hash(z*.41)*6;
+      mkTree(grp,tx,by+BANK_H*.55+hash(z*.51)*2.5,z+hash(z*.61)*2.5,tm,hash(z*.71));
     }
-
-    // Right bank trees
-    if (hash2(z * 0.19, 33.7) > 0.35) {
-      const tx = cx + halfW + 2 + hash(z * 0.43) * 5;
-      createTree(group, tx, baseH + BANK_HEIGHT * 0.5 + hash(z * 0.53) * 2, z + hash(z * 0.63) * 3, trunkMat, leafMats, hash(z * 0.73));
+    // Right bank
+    if(hash2(z*.19,33.7)>.3){
+      const tx=cx+hw+2.5+hash(z*.43)*6;
+      mkTree(grp,tx,by+BANK_H*.55+hash(z*.53)*2.5,z+hash(z*.63)*2.5,tm,hash(z*.73));
     }
   }
 }
 
-function createTree(group, x, y, z, trunkMat, leafMats, seed) {
-  const treeGroup = new THREE.Group();
-  const height = 2.5 + seed * 4;
-  const radius = 0.8 + seed * 1.5;
+function mkTree(grp,x,y,z,tm,seed){
+  const tg=new THREE.Group();
+  const h=3+seed*5, r=.9+seed*1.8;
 
   // Trunk
-  const trunk = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.1, 0.18, height * 0.4, 5),
-    trunkMat
-  );
-  trunk.position.y = height * 0.2;
-  treeGroup.add(trunk);
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.08,.16,h*.35,5),tm.trunk);
+  trunk.position.y=h*.17;
+  tg.add(trunk);
 
-  // Canopy layers (pine-tree style cones)
-  const leafMat = leafMats[Math.floor(seed * leafMats.length) % leafMats.length];
-  const layers = 2 + Math.floor(seed * 2);
-  for (let i = 0; i < layers; i++) {
-    const f = i / layers;
-    const coneH = height * 0.35 * (1 - f * 0.3);
-    const coneR = radius * (1 - f * 0.4);
-    const cone = new THREE.Mesh(
-      new THREE.ConeGeometry(coneR, coneH, 6),
-      leafMat
-    );
-    cone.position.y = height * 0.35 + i * height * 0.2;
-    if (!isMobile) cone.castShadow = true;
-    treeGroup.add(cone);
+  // Canopy cones
+  const lm=tm.leaves[Math.floor(seed*3)%3];
+  const layers=2+Math.floor(seed*2);
+  for(let i=0;i<layers;i++){
+    const f=i/layers;
+    const ch=h*.32*(1-f*.3), cr=r*(1-f*.35);
+    const cone=new THREE.Mesh(new THREE.ConeGeometry(cr,ch,6),lm);
+    cone.position.y=h*.3+i*h*.19;
+    if(!isMobile)cone.castShadow=true;
+    tg.add(cone);
   }
-
-  treeGroup.position.set(x, y, z);
-  treeGroup.rotation.y = seed * Math.PI * 2;
-  group.add(treeGroup);
+  tg.position.set(x,y,z);
+  tg.rotation.y=seed*6.28;
+  grp.add(tg);
 }
 
-function generateGroundPlanes(group, startZ, endZ, groundMat) {
-  // Ground strips alongside the river on each side
-  const step = CHUNK_SIZE;
-  for (let side = -1; side <= 1; side += 2) {
-    const geo = new THREE.PlaneGeometry(30, step, 4, 8);
-    geo.rotateX(-Math.PI / 2);
-    const pos = geo.attributes.position;
-    for (let i = 0; i < pos.count; i++) {
-      const lz = pos.getZ(i) + startZ + step * 0.5;
-      const cx = riverCenterX(lz);
-      const w = riverWidth(lz);
-      const halfW = w * 0.5;
-      const baseH = riverBaseY(lz);
-
-      const gx = pos.getX(i) * side + cx + side * (halfW + 15);
-      pos.setX(i, gx);
-      pos.setY(i, baseH + BANK_HEIGHT * 0.4 + hash2(gx * 0.1, lz * 0.1) * 2);
-      pos.setZ(i, lz);
+/* ── Bush / grass tufts on banks ── */
+function genBushes(grp,z0,z1){
+  const mat=new THREE.MeshPhongMaterial({color:0x3a7a3a,flatShading:true});
+  for(let z=z0;z<z1;z+=3.5){
+    for(let side=-1;side<=1;side+=2){
+      if(hash2(z*.27+side,55.3)>.55)continue;
+      const cx=rCenterX(z),w=rWidth(z),hw=w*.5,by=rBaseY(z);
+      const bx=cx+side*(hw+.5+hash(z*.33)*1.5);
+      const bsz=.3+hash2(z*.37,side*19)*.5;
+      const bush=new THREE.Mesh(new THREE.IcosahedronGeometry(bsz,0),mat);
+      bush.position.set(bx,by+BANK_H*.25+hash(z*.47)*1.5,z+hash(z*.57)*2);
+      bush.scale.y=.6;
+      grp.add(bush);
     }
-    geo.computeVertexNormals();
-
-    const gMesh = new THREE.Mesh(geo, groundMat);
-    if (!isMobile) gMesh.receiveShadow = true;
-    group.add(gMesh);
   }
 }
 
-function removeChunk(chunkIdx) {
-  const group = chunks.get(chunkIdx);
-  if (!group) return;
+/* ── Chunk cleanup ── */
+function killChunk(ci){
+  const g=chunks.get(ci); if(!g)return;
+  const z0=ci*CHUNK_LEN,z1=z0+CHUNK_LEN;
 
-  // Remove colliders and eddies for this chunk
-  const startZ = chunkIdx * CHUNK_SIZE;
-  const endZ = startZ + CHUNK_SIZE;
+  for(let i=colliders.length-1;i>=0;i--)
+    if(colliders[i].z>=z0&&colliders[i].z<z1) colliders.splice(i,1);
+  for(let i=eddies.length-1;i>=0;i--)
+    if(eddies[i].z>=z0&&eddies[i].z<z1) eddies.splice(i,1);
+  for(let i=stoppers.length-1;i>=0;i--)
+    if(stoppers[i].zMin>=z0&&stoppers[i].zMax<z1) stoppers.splice(i,1);
 
-  for (let i = rockColliders.length - 1; i >= 0; i--) {
-    if (rockColliders[i].z >= startZ && rockColliders[i].z < endZ) {
-      rockColliders.splice(i, 1);
-    }
-  }
-  for (let i = eddyZones.length - 1; i >= 0; i--) {
-    if (eddyZones[i].z >= startZ && eddyZones[i].z < endZ) {
-      eddyZones.splice(i, 1);
-    }
-  }
-
-  // Dispose geometries and materials
-  group.traverse(child => {
-    if (child.geometry) child.geometry.dispose();
-    if (child.material) {
-      if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
-      else child.material.dispose();
+  g.traverse(c=>{
+    if(c.geometry)c.geometry.dispose();
+    if(c.material){
+      if(Array.isArray(c.material))c.material.forEach(m=>m.dispose());
+      else if(c.material!==getTreeMats().trunk&&!getTreeMats().leaves.includes(c.material))
+        c.material.dispose();
     }
   });
-
-  scene.remove(group);
-  chunks.delete(chunkIdx);
+  scene.remove(g);
+  chunks.delete(ci);
 }
 
-function updateChunks() {
-  const currentChunk = Math.floor(S.posZ / CHUNK_SIZE);
-  if (currentChunk === S.lastChunkIdx) return;
-  S.lastChunkIdx = currentChunk;
-
-  // Generate chunks ahead
-  for (let i = -CHUNKS_BEHIND; i <= CHUNKS_AHEAD; i++) {
-    generateChunk(currentChunk + i);
-  }
-
-  // Remove far chunks
-  for (const [idx] of chunks) {
-    if (idx < currentChunk - CHUNKS_BEHIND - 1 || idx > currentChunk + CHUNKS_AHEAD + 1) {
-      removeChunk(idx);
-    }
-  }
+function updateChunks(){
+  const cur=Math.floor(S.posZ/CHUNK_LEN);
+  if(cur===S.lastChunk)return;
+  S.lastChunk=cur;
+  for(let i=-CHUNKS_BACK;i<=CHUNKS_FWD;i++) genChunk(cur+i);
+  for(const[ci] of chunks)
+    if(ci<cur-CHUNKS_BACK-1||ci>cur+CHUNKS_FWD+1) killChunk(ci);
 }
 
 /* ═══════════════════════════════════════════════
    KAYAK MODEL
    ═══════════════════════════════════════════════ */
-function createKayak() {
-  kayakGroup = new THREE.Group();
+function createKayak(){
+  kayakGroup=new THREE.Group();
 
-  // Hull — tapered box
-  const hGeo = new THREE.BoxGeometry(3.2, 0.22, 0.52, 16, 1, 4);
-  const pos = hGeo.attributes.position;
-  for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i);
-    const taper = 1.0 - Math.pow(Math.abs(x) / 1.6, 2.2) * 0.8;
-    pos.setZ(i, pos.getZ(i) * Math.max(taper, 0.08));
-    if (pos.getY(i) < 0) pos.setY(i, pos.getY(i) - (1 - taper) * 0.08);
+  // Hull
+  const hGeo=new THREE.BoxGeometry(3.2,.22,.52,16,1,4);
+  const hp=hGeo.attributes.position;
+  for(let i=0;i<hp.count;i++){
+    const x=hp.getX(i),tap=1-Math.pow(Math.abs(x)/1.6,2.2)*.8;
+    hp.setZ(i,hp.getZ(i)*Math.max(tap,.08));
+    if(hp.getY(i)<0) hp.setY(i,hp.getY(i)-(1-tap)*.08);
   }
   hGeo.computeVertexNormals();
-  const hMat = new THREE.MeshPhongMaterial({ color: 0xcc2828, specular: 0x444444, shininess: 50 });
-  const hull = new THREE.Mesh(hGeo, hMat);
-  if (!isMobile) hull.castShadow = true;
+  const hull=new THREE.Mesh(hGeo,new THREE.MeshPhongMaterial({color:0xcc2828,specular:0x444444,shininess:50}));
+  if(!isMobile)hull.castShadow=true;
   kayakGroup.add(hull);
 
-  // Deck stripe
-  const dGeo = new THREE.BoxGeometry(2.4, 0.04, 0.36, 12, 1, 1);
-  const dp = dGeo.attributes.position;
-  for (let i = 0; i < dp.count; i++) {
-    const x = dp.getX(i);
-    const taper = 1.0 - Math.pow(Math.abs(x) / 1.2, 2) * 0.7;
-    dp.setZ(i, dp.getZ(i) * Math.max(taper, 0.15));
+  // Deck
+  const dGeo=new THREE.BoxGeometry(2.4,.04,.36,12,1,1);
+  const dp=dGeo.attributes.position;
+  for(let i=0;i<dp.count;i++){
+    const x=dp.getX(i),tap=1-Math.pow(Math.abs(x)/1.2,2)*.7;
+    dp.setZ(i,dp.getZ(i)*Math.max(tap,.15));
   }
   dGeo.computeVertexNormals();
-  const deck = new THREE.Mesh(dGeo, new THREE.MeshPhongMaterial({ color: 0xe03838 }));
-  deck.position.y = 0.12;
+  const deck=new THREE.Mesh(dGeo,new THREE.MeshPhongMaterial({color:0xe03838}));
+  deck.position.y=.12;
   kayakGroup.add(deck);
 
   // Cockpit rim
-  const rGeo = new THREE.TorusGeometry(0.19, 0.025, 8, 20);
-  rGeo.rotateX(Math.PI / 2);
-  const rim = new THREE.Mesh(rGeo, new THREE.MeshPhongMaterial({ color: 0x222222 }));
-  rim.position.y = 0.14;
+  const rim=new THREE.Mesh(
+    new THREE.TorusGeometry(.19,.025,8,20).rotateX(Math.PI/2),
+    new THREE.MeshPhongMaterial({color:0x222222})
+  );
+  rim.position.y=.14;
   kayakGroup.add(rim);
 
   // Seat
-  const sGeo = new THREE.BoxGeometry(0.25, 0.03, 0.28);
-  const seat = new THREE.Mesh(sGeo, new THREE.MeshPhongMaterial({ color: 0x333333 }));
-  seat.position.y = 0.09;
-  seat.position.x = -0.05;
+  const seat=new THREE.Mesh(
+    new THREE.BoxGeometry(.25,.03,.28),
+    new THREE.MeshPhongMaterial({color:0x333333})
+  );
+  seat.position.set(-.05,.09,0);
   kayakGroup.add(seat);
 
   // Paddle
-  paddlePivot = new THREE.Group();
-  paddlePivot.position.set(0, 0.32, 0);
-
-  const shaft = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.014, 0.014, 1.7, 8),
-    new THREE.MeshPhongMaterial({ color: 0x444444 })
+  paddlePivot=new THREE.Group();
+  paddlePivot.position.set(0,.32,0);
+  const shaft=new THREE.Mesh(
+    new THREE.CylinderGeometry(.014,.014,1.7,8),
+    new THREE.MeshPhongMaterial({color:0x444444})
   );
-  shaft.rotation.z = Math.PI / 2;
+  shaft.rotation.z=Math.PI/2;
   paddlePivot.add(shaft);
 
-  const bladeMat = new THREE.MeshPhongMaterial({ color: 0x1a6fa0, specular: 0x333333, shininess: 30 });
-  leftBladeMesh = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.30, 0.13), bladeMat);
-  leftBladeMesh.position.set(-0.90, -0.02, 0);
-  paddlePivot.add(leftBladeMesh);
-
-  rightBladeMesh = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.30, 0.13), bladeMat.clone());
-  rightBladeMesh.position.set(0.90, -0.02, 0);
-  paddlePivot.add(rightBladeMesh);
+  const bm=new THREE.MeshPhongMaterial({color:0x1a6fa0,specular:0x333333,shininess:30});
+  const lb=new THREE.Mesh(new THREE.BoxGeometry(.02,.30,.13),bm);
+  lb.position.set(-.90,-.02,0); paddlePivot.add(lb);
+  const rb=new THREE.Mesh(new THREE.BoxGeometry(.02,.30,.13),bm.clone());
+  rb.position.set(.90,-.02,0); paddlePivot.add(rb);
 
   kayakGroup.add(paddlePivot);
   scene.add(kayakGroup);
@@ -993,429 +906,361 @@ function createKayak() {
 /* ═══════════════════════════════════════════════
    PHYSICS
    ═══════════════════════════════════════════════ */
-function updatePhysics(dt, t) {
-  const isArcade = S.mode === 'arcade';
-  const thrust = isArcade ? 6.0 : 4.5;
-  const turnF = isArcade ? 2.2 : 3.0;
-  const drag = 0.45;
-  const aDrag = 2.5;
+function updatePhysics(dt,t){
+  const arc=S.mode==='arcade';
+  const thrust=arc?5.5:4.0;
+  const turnF=arc?2.2:3.0;
+  const drag=.5;
+  const aDrag=2.8;
 
-  // Paddle strokes
-  if (input.left)  S.lStroke = Math.min(S.lStroke + dt * 5, 1);
-  else             S.lStroke = Math.max(S.lStroke - dt * 4, 0);
-  if (input.right) S.rStroke = Math.min(S.rStroke + dt * 5, 1);
-  else             S.rStroke = Math.max(S.rStroke - dt * 4, 0);
+  // Strokes
+  if(input.left)  S.lStroke=Math.min(S.lStroke+dt*5,1);
+  else            S.lStroke=Math.max(S.lStroke-dt*4,0);
+  if(input.right) S.rStroke=Math.min(S.rStroke+dt*5,1);
+  else            S.rStroke=Math.max(S.rStroke-dt*4,0);
 
-  // Get current at player position
-  const cur = riverCurrent(S.posX, S.posZ);
+  // Current
+  const cur=rCurrent(S.posX,S.posZ);
+  S.velX+=cur.x*dt*2.2;
+  S.velZ+=cur.z*dt*2.2;
 
-  // Apply river current to velocity
-  S.velX += cur.x * dt * 2.0;
-  S.velZ += cur.z * dt * 2.0;
-
-  // Paddle thrust (in facing direction)
-  const lf = input.left ? 1 : 0;
-  const rf = input.right ? 1 : 0;
-  const thrustMag = (lf + rf) * thrust * dt;
-  S.velX += Math.sin(S.heading) * thrustMag;
-  S.velZ += Math.cos(S.heading) * thrustMag;
-
-  // Turning from strokes
-  if (isArcade) {
-    S.angVel -= lf * turnF * dt * 0.5;
-    S.angVel += rf * turnF * dt * 0.5;
-  } else {
-    S.angVel += lf * turnF * dt * 0.5;
-    S.angVel -= rf * turnF * dt * 0.5;
+  // Auto-align with current (makes control intuitive)
+  const curSpd=Math.hypot(cur.x,cur.z);
+  if(curSpd>.3){
+    const curAng=Math.atan2(cur.x,cur.z);
+    let diff=curAng-S.heading;
+    while(diff>Math.PI)diff-=2*Math.PI;
+    while(diff<-Math.PI)diff+=2*Math.PI;
+    S.angVel+=diff*dt*.4*curSpd;
   }
 
-  // Arrow key steering
-  if (input.steerL) S.angVel -= (isArcade ? 2.5 : 1.2) * dt;
-  if (input.steerR) S.angVel += (isArcade ? 2.5 : 1.2) * dt;
+  // Paddle thrust
+  const lf=input.left?1:0, rf=input.right?1:0;
+  let fwd=input.fwd?1:0;
+  const bk=input.back?1:0;
+  const thr=(lf+rf+fwd*2-bk)*thrust*dt;
+  S.velX+=Math.sin(S.heading)*thr;
+  S.velZ+=Math.cos(S.heading)*thr;
+
+  // Turning from differential paddle
+  if(arc){ S.angVel-=lf*turnF*dt*.5; S.angVel+=rf*turnF*dt*.5; }
+  else   { S.angVel+=lf*turnF*dt*.5; S.angVel-=rf*turnF*dt*.5; }
+
+  // Arrow keys
+  if(input.steerL) S.angVel-=(arc?2.5:1.2)*dt;
+  if(input.steerR) S.angVel+=(arc?2.5:1.2)*dt;
 
   // Lean
-  let targetLean = 0;
-  if (input.leanL) targetLean = -1;
-  if (input.leanR) targetLean = 1;
-  S.lean += (targetLean - S.lean) * Math.min(dt * 4, 1);
+  let tgtLean=0;
+  if(input.leanL)tgtLean=-1;
+  if(input.leanR)tgtLean=1;
+  S.lean+=(tgtLean-S.lean)*Math.min(dt*4,1);
 
   // Drag
-  S.velX *= Math.max(1 - drag * dt, 0);
-  S.velZ *= Math.max(1 - drag * dt, 0);
-  S.angVel *= Math.max(1 - aDrag * dt, 0);
+  S.velX*=Math.max(1-drag*dt,0);
+  S.velZ*=Math.max(1-drag*dt,0);
+  S.angVel*=Math.max(1-aDrag*dt,0);
 
-  // Eddy effect: if in eddy, slow down and gentle rotation
-  if (cur.eddy > 0.3) {
-    S.velX *= 1 - cur.eddy * dt * 2;
-    S.velZ *= 1 - cur.eddy * dt * 2;
-    S.angVel += cur.eddy * dt * 0.5;
+  // Eddy effect
+  if(cur.eddy>.3){
+    S.velX*=1-cur.eddy*dt*2.5;
+    S.velZ*=1-cur.eddy*dt*2.5;
+    S.angVel+=cur.eddy*dt*.4;
   }
 
-  // Bank collision — keep kayak in river
-  const cx = riverCenterX(S.posZ);
-  const w = riverWidth(S.posZ);
-  const halfW = w * 0.5 - 0.5; // margin
-  const fromCenter = S.posX - cx;
-  if (Math.abs(fromCenter) > halfW) {
-    const pushDir = fromCenter > 0 ? -1 : 1;
-    S.velX += pushDir * dt * 12;
-    S.posX = cx + Math.sign(fromCenter) * halfW;
-    // Bounce off bank
-    S.velX *= -0.3;
-    S.speed *= 0.8;
+  // Stopper effect — hard to escape!
+  if(cur.stopper>.2){
+    S.velX*=1-cur.stopper*dt*3;
+    S.velZ*=1-cur.stopper*dt*3;
+  }
+
+  // Bank collision
+  const cx=rCenterX(S.posZ),w=rWidth(S.posZ),hw=w*.5-.6;
+  const fromC=S.posX-cx;
+  if(Math.abs(fromC)>hw){
+    const push=fromC>0?-1:1;
+    S.velX+=push*dt*15;
+    S.posX=cx+Math.sign(fromC)*hw;
+    S.velX*=-.25;
+    flashCollision();
   }
 
   // Rock collision
-  for (const rock of rockColliders) {
-    const dx = S.posX - rock.x;
-    const dz = S.posZ - rock.z;
-    const dist = Math.hypot(dx, dz);
-    const minDist = rock.radius + 0.5; // kayak half-width
-    if (dist < minDist && dist > 0.01) {
-      // Push away
-      const nx = dx / dist;
-      const nz = dz / dist;
-      const overlap = minDist - dist;
-      S.posX += nx * overlap * 1.2;
-      S.posZ += nz * overlap * 1.2;
-      // Reflect velocity
-      const dot = S.velX * nx + S.velZ * nz;
-      if (dot < 0) {
-        S.velX -= 2 * dot * nx * 0.5;
-        S.velZ -= 2 * dot * nz * 0.5;
-      }
-      // Speed loss
-      S.velX *= 0.6;
-      S.velZ *= 0.6;
+  for(const rc of colliders){
+    const dx=S.posX-rc.x, dz=S.posZ-rc.z;
+    const d=Math.hypot(dx,dz), minD=rc.r+.55;
+    if(d<minD&&d>.01){
+      const nx=dx/d, nz=dz/d, ol=minD-d;
+      S.posX+=nx*ol*1.3; S.posZ+=nz*ol*1.3;
+      const dot=S.velX*nx+S.velZ*nz;
+      if(dot<0){ S.velX-=2*dot*nx*.45; S.velZ-=2*dot*nz*.45; }
+      S.velX*=.55; S.velZ*=.55;
+      flashCollision();
     }
   }
 
   // Speed clamp
-  const spd = Math.hypot(S.velX, S.velZ);
-  if (spd > 14) {
-    S.velX *= 14 / spd;
-    S.velZ *= 14 / spd;
-  }
-  S.speed = spd;
+  const spd=Math.hypot(S.velX,S.velZ);
+  if(spd>15){S.velX*=15/spd;S.velZ*=15/spd;}
+  S.speed=spd;
 
-  // Integrate heading
-  S.heading += S.angVel * dt;
+  S.heading+=S.angVel*dt;
+  S.posX+=S.velX*dt;
+  S.posZ+=S.velZ*dt;
+  S.dist=Math.max(0,S.posZ);
 
-  // Integrate position
-  S.posX += S.velX * dt;
-  S.posZ += S.velZ * dt;
-  S.dist = S.posZ; // distance downstream
+  S.posY=waterH(S.posX,S.posZ,t);
+  const n=waterN(S.posX,S.posZ,t);
 
-  // Water height + tilt
-  S.posY = waterH(S.posX, S.posZ, t);
-  const n = waterNormal(S.posX, S.posZ, t);
+  kayakGroup.position.set(S.posX,S.posY,S.posZ);
+  kayakGroup.rotation.y=S.heading;
+  kayakGroup.rotation.x=Math.atan2(n.z,n.y)*.6;
+  kayakGroup.rotation.z=Math.atan2(n.x,n.y)*.6+S.lean*.18;
 
-  // Apply to kayak group
-  kayakGroup.position.set(S.posX, S.posY, S.posZ);
-  kayakGroup.rotation.y = S.heading;
+  // Paddle anim
+  let tp=0;
+  if(input.left&&!input.right)tp=-.7;
+  if(input.right&&!input.left)tp=.7;
+  if(input.fwd)tp=Math.sin(t*8)*.5;
+  S.paddleAnim+=(tp-S.paddleAnim)*Math.min(dt*10,1);
+  paddlePivot.rotation.x=S.paddleAnim;
 
-  // Tilt kayak with water surface + lean
-  const pitch = Math.atan2(n.z, n.y) * 0.6;
-  const roll = Math.atan2(n.x, n.y) * 0.6 + S.lean * 0.18;
-  kayakGroup.rotation.x = pitch;
-  kayakGroup.rotation.z = roll;
-
-  // Paddle animation
-  let targetPaddle = 0;
-  if (input.left && !input.right) targetPaddle = -0.7;
-  if (input.right && !input.left) targetPaddle = 0.7;
-  S.paddleAnim += (targetPaddle - S.paddleAnim) * Math.min(dt * 10, 1);
-  paddlePivot.rotation.x = S.paddleAnim;
-
-  // Update chunks
   updateChunks();
+}
+
+function flashCollision(){
+  S.collisionFlash=.25;
+  document.getElementById('collision-flash').style.opacity='1';
 }
 
 /* ═══════════════════════════════════════════════
    CAMERA
    ═══════════════════════════════════════════════ */
-const camSmooth = { x: 0, y: 5, z: -8 };
+const cam={x:0,y:5,z:-8};
 
-function updateCamera(dt) {
-  let offX, offY, offZ;
+function updateCamera(dt){
+  let ox,oy,oz;
+  if(S.camMode===0){ ox=0;oy=3.2;oz=-6; }
+  else if(S.camMode===1){ ox=0;oy=.6;oz=.3; }
+  else{ S.orbitA+=dt*.25; ox=Math.sin(S.orbitA)*8;oy=4;oz=Math.cos(S.orbitA)*8; }
 
-  if (S.camMode === 0) { // Third-person behind
-    offX = 0; offY = 2.8; offZ = -5.5;
-  } else if (S.camMode === 1) { // First-person cockpit
-    offX = 0; offY = 0.6; offZ = 0.3;
-  } else { // Orbit
-    S.orbitAngle += dt * 0.25;
-    offX = Math.sin(S.orbitAngle) * 7;
-    offY = 3.5;
-    offZ = Math.cos(S.orbitAngle) * 7;
-  }
+  const ch=Math.cos(S.heading),sh=Math.sin(S.heading);
+  const rx=ox*ch+oz*sh, rz=-ox*sh+oz*ch;
+  const tx=S.posX+rx, ty=S.posY+oy, tz=S.posZ+rz;
 
-  // Rotate offset by heading
-  const cosH = Math.cos(S.heading), sinH = Math.sin(S.heading);
-  const rx = offX * cosH + offZ * sinH;
-  const rz = -offX * sinH + offZ * cosH;
+  const l=1-Math.pow(.004,dt);
+  cam.x+=(tx-cam.x)*l;
+  cam.y+=(ty-cam.y)*l;
+  cam.z+=(tz-cam.z)*l;
+  camera.position.set(cam.x,cam.y,cam.z);
 
-  const tx = S.posX + rx;
-  const ty = S.posY + offY;
-  const tz = S.posZ + rz;
-
-  const lerp = 1 - Math.pow(0.005, dt);
-  camSmooth.x += (tx - camSmooth.x) * lerp;
-  camSmooth.y += (ty - camSmooth.y) * lerp;
-  camSmooth.z += (tz - camSmooth.z) * lerp;
-
-  camera.position.set(camSmooth.x, camSmooth.y, camSmooth.z);
-
-  // Look slightly ahead of the kayak (downstream)
-  const lookAhead = 3;
-  const tang = riverTangent(S.posZ);
-  camera.lookAt(
-    S.posX + tang.x * lookAhead,
-    S.posY + 0.3,
-    S.posZ + tang.z * lookAhead
-  );
+  const tg=rTangent(S.posZ);
+  camera.lookAt(S.posX+tg.x*4,S.posY+.25,S.posZ+tg.z*4);
 }
 
 /* ═══════════════════════════════════════════════
    HUD
    ═══════════════════════════════════════════════ */
-const elSpeed = () => document.getElementById('speed-val');
-const elHeading = () => document.getElementById('heading-val');
-const elStrokeL = () => document.getElementById('stroke-l');
-const elStrokeR = () => document.getElementById('stroke-r');
-const elDist = () => document.getElementById('dist-val');
+function updateHUD(){
+  document.getElementById('speed-val').textContent=(S.speed*3.6).toFixed(1);
+  let deg=((S.heading*180/Math.PI)%360+360)%360;
+  document.getElementById('heading-val').textContent=String(Math.round(deg)).padStart(3,'0')+'°';
+  document.getElementById('stroke-l').style.height=(S.lStroke*100)+'%';
+  document.getElementById('stroke-r').style.height=(S.rStroke*100)+'%';
+  document.getElementById('dist-val').textContent=Math.round(S.dist);
 
-function updateHUD() {
-  const kmh = S.speed * 3.6;
-  elSpeed().textContent = kmh.toFixed(1);
-  let deg = ((S.heading * 180 / Math.PI) % 360 + 360) % 360;
-  elHeading().textContent = String(Math.round(deg)).padStart(3, '0') + '°';
-  elStrokeL().style.height = (S.lStroke * 100) + '%';
-  elStrokeR().style.height = (S.rStroke * 100) + '%';
-  elDist().textContent = Math.max(0, Math.round(S.dist));
+  // Rapids indicator
+  const ri=document.getElementById('rapids-indicator');
+  ri.style.display=(S.playing&&isRapids(S.posZ))?'block':'none';
+
+  // Collision flash fade
+  if(S.collisionFlash>0){
+    S.collisionFlash-=.016;
+    if(S.collisionFlash<=0)
+      document.getElementById('collision-flash').style.opacity='0';
+  }
 }
 
 /* ═══════════════════════════════════════════════
    GAME LOOP
    ═══════════════════════════════════════════════ */
-function animate() {
+function animate(){
   requestAnimationFrame(animate);
-  const dt = Math.min(clock.getDelta(), 0.05);
-  const t = clock.getElapsedTime();
+  const dt=Math.min(clock.getDelta(),.05);
+  const t=clock.getElapsedTime();
 
-  // Update water shader
-  waterMesh.material.uniforms.uTime.value = t;
-  waterMesh.material.uniforms.uPlayerZ.value = S.posZ;
+  waterMesh.material.uniforms.uTime.value=t;
+  waterMesh.material.uniforms.uPZ.value=S.posZ;
+  waterMesh.position.z=S.posZ;
 
-  // Reposition water mesh to follow player
-  waterMesh.position.z = S.posZ;
-
-  if (S.playing && !S.paused) {
-    updatePhysics(dt, t);
+  if(S.playing&&!S.paused){
+    updatePhysics(dt,t);
     updateCamera(dt);
     updateHUD();
+    updateFoam(dt,t);
 
-    // Update sun shadow to follow player
-    const sunLight = scene.children.find(c => c.isDirectionalLight);
-    if (sunLight && sunLight.shadow) {
-      sunLight.position.set(S.posX + 40, S.posY + 80, S.posZ + 60);
-      sunLight.target.position.set(S.posX, S.posY, S.posZ);
-      sunLight.target.updateMatrixWorld();
+    // Move sun shadow to follow player
+    const sl=scene.children.find(c=>c.isDirectionalLight);
+    if(sl){
+      sl.position.set(S.posX+40,S.posY+80,S.posZ+60);
+      sl.target.position.set(S.posX,S.posY,S.posZ);
+      sl.target.updateMatrixWorld();
     }
   } else {
-    // Menu idle: orbit camera over the river start
-    const ix = riverCenterX(20) + Math.sin(t * 0.15) * 6;
-    const iy = riverBaseY(20) + 6;
-    const iz = 20 + Math.cos(t * 0.15) * 8;
-    camera.position.set(ix, iy, iz);
-    camera.lookAt(riverCenterX(25), riverBaseY(25), 25);
-
-    // Generate initial chunks for menu view
-    for (let i = -1; i <= 4; i++) {
-      generateChunk(i);
-    }
+    // Menu idle camera
+    const mz=25;
+    const mx=rCenterX(mz)+Math.sin(t*.12)*5;
+    const my=rBaseY(mz)+8;
+    const mzz=mz+Math.cos(t*.12)*7;
+    camera.position.set(mx,my,mzz);
+    camera.lookAt(rCenterX(30),rBaseY(30),30);
+    for(let i=-1;i<=4;i++) genChunk(i);
   }
-
-  renderer.render(scene, camera);
+  renderer.render(scene,camera);
 }
 
 /* ═══════════════════════════════════════════════
    INPUT
    ═══════════════════════════════════════════════ */
-function setupInput() {
-  document.addEventListener('keydown', e => {
-    if (e.repeat) return;
-    switch (e.code) {
-      case 'KeyA':       input.left = true; break;
-      case 'KeyD':       input.right = true; break;
-      case 'ArrowLeft':  input.steerL = true; break;
-      case 'ArrowRight': input.steerR = true; break;
-      case 'KeyQ':       input.leanL = true; break;
-      case 'KeyE':       input.leanR = true; break;
-      case 'KeyC':       if (S.playing) { S.camMode = (S.camMode + 1) % 3; } break;
-      case 'Escape':     if (S.playing) togglePause(); break;
+function setupInput(){
+  document.addEventListener('keydown',e=>{
+    if(e.repeat)return;
+    switch(e.code){
+      case'KeyW':       input.fwd=true;break;
+      case'KeyS':       input.back=true;break;
+      case'KeyA':       input.left=true;break;
+      case'KeyD':       input.right=true;break;
+      case'ArrowLeft':  input.steerL=true;break;
+      case'ArrowRight': input.steerR=true;break;
+      case'KeyQ':       input.leanL=true;break;
+      case'KeyE':       input.leanR=true;break;
+      case'KeyC':       if(S.playing)S.camMode=(S.camMode+1)%3;break;
+      case'Escape':     if(S.playing)togglePause();break;
     }
   });
-  document.addEventListener('keyup', e => {
-    switch (e.code) {
-      case 'KeyA':       input.left = false; break;
-      case 'KeyD':       input.right = false; break;
-      case 'ArrowLeft':  input.steerL = false; break;
-      case 'ArrowRight': input.steerR = false; break;
-      case 'KeyQ':       input.leanL = false; break;
-      case 'KeyE':       input.leanR = false; break;
+  document.addEventListener('keyup',e=>{
+    switch(e.code){
+      case'KeyW':       input.fwd=false;break;
+      case'KeyS':       input.back=false;break;
+      case'KeyA':       input.left=false;break;
+      case'KeyD':       input.right=false;break;
+      case'ArrowLeft':  input.steerL=false;break;
+      case'ArrowRight': input.steerR=false;break;
+      case'KeyQ':       input.leanL=false;break;
+      case'KeyE':       input.leanR=false;break;
     }
   });
 
-  const tl = document.getElementById('tl');
-  const tr = document.getElementById('tr');
-  tl.addEventListener('touchstart', e => { e.preventDefault(); input.left = true; }, { passive: false });
-  tl.addEventListener('touchend', e => { e.preventDefault(); input.left = false; }, { passive: false });
-  tr.addEventListener('touchstart', e => { e.preventDefault(); input.right = true; }, { passive: false });
-  tr.addEventListener('touchend', e => { e.preventDefault(); input.right = false; }, { passive: false });
+  const tl=document.getElementById('tl'),tr=document.getElementById('tr');
+  tl.addEventListener('touchstart',e=>{e.preventDefault();input.left=true;},{passive:false});
+  tl.addEventListener('touchend',e=>{e.preventDefault();input.left=false;},{passive:false});
+  tr.addEventListener('touchstart',e=>{e.preventDefault();input.right=true;},{passive:false});
+  tr.addEventListener('touchend',e=>{e.preventDefault();input.right=false;},{passive:false});
 }
 
 /* ═══════════════════════════════════════════════
    MENU / PAUSE
    ═══════════════════════════════════════════════ */
-function showUI(playing) {
-  document.getElementById('hud').style.display = playing ? 'block' : 'none';
-  document.getElementById('stroke-box').style.display = playing ? 'flex' : 'none';
-  document.getElementById('distance-box').style.display = playing ? 'block' : 'none';
-  document.getElementById('toolbar').style.display = playing ? 'flex' : 'none';
-  if (isMobile) document.getElementById('touch').style.display = playing ? 'block' : 'none';
+function showUI(on){
+  document.getElementById('hud').style.display=on?'block':'none';
+  document.getElementById('stroke-box').style.display=on?'flex':'none';
+  document.getElementById('distance-box').style.display=on?'block':'none';
+  document.getElementById('toolbar').style.display=on?'flex':'none';
+  if(isMobile)document.getElementById('touch').style.display=on?'block':'none';
 }
 
-function startGame() {
-  S.mode = document.querySelector('input[name="mode"]:checked').value;
-  S.playing = true; S.paused = false;
-  S.posX = riverCenterX(0);
-  S.posZ = 5;
-  S.posY = riverBaseY(5);
-  S.heading = 0;
-  S.speed = 0;
-  S.velX = 0; S.velZ = 0;
-  S.angVel = 0; S.lean = 0;
-  S.lStroke = 0; S.rStroke = 0; S.paddleAnim = 0;
-  S.dist = 0; S.camMode = 0; S.orbitAngle = 0;
-  S.lastChunkIdx = -999;
+function startGame(){
+  S.mode=document.querySelector('input[name="mode"]:checked').value;
+  S.playing=true;S.paused=false;
+  S.posX=rCenterX(5);S.posZ=5;S.posY=rBaseY(5);
+  S.heading=0;S.speed=0;S.velX=0;S.velZ=0;
+  S.angVel=0;S.lean=0;S.lStroke=0;S.rStroke=0;S.paddleAnim=0;
+  S.dist=0;S.camMode=0;S.orbitA=0;S.lastChunk=-999;S.collisionFlash=0;
 
-  // Clear old chunks
-  for (const [idx] of chunks) removeChunk(idx);
-  rockColliders.length = 0;
-  eddyZones.length = 0;
+  for(const[ci] of chunks) killChunk(ci);
+  colliders.length=0;eddies.length=0;stoppers.length=0;
 
-  camSmooth.x = S.posX;
-  camSmooth.y = S.posY + 5;
-  camSmooth.z = S.posZ - 8;
-
-  document.getElementById('menu').style.display = 'none';
-  document.getElementById('pause').style.display = 'none';
+  cam.x=S.posX;cam.y=S.posY+5;cam.z=S.posZ-8;
+  document.getElementById('menu').style.display='none';
+  document.getElementById('pause').style.display='none';
   showUI(true);
   initAudio();
-
-  // Generate initial chunks
   updateChunks();
 }
 
-function togglePause() {
-  S.paused = !S.paused;
-  document.getElementById('pause').style.display = S.paused ? 'flex' : 'none';
+function togglePause(){
+  S.paused=!S.paused;
+  document.getElementById('pause').style.display=S.paused?'flex':'none';
 }
 
-function returnToMenu() {
-  S.playing = false; S.paused = false;
-  document.getElementById('pause').style.display = 'none';
-  document.getElementById('menu').style.display = 'flex';
+function returnToMenu(){
+  S.playing=false;S.paused=false;
+  document.getElementById('pause').style.display='none';
+  document.getElementById('menu').style.display='flex';
   showUI(false);
 }
 
-function setupMenuEvents() {
-  document.getElementById('start-btn').addEventListener('click', startGame);
-  document.getElementById('resume-btn').addEventListener('click', togglePause);
-  document.getElementById('menu-btn').addEventListener('click', returnToMenu);
-  document.getElementById('btn-pause').addEventListener('click', togglePause);
-
-  document.getElementById('btn-fs').addEventListener('click', () => {
-    if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+function setupMenuEvents(){
+  document.getElementById('start-btn').addEventListener('click',startGame);
+  document.getElementById('resume-btn').addEventListener('click',togglePause);
+  document.getElementById('menu-btn').addEventListener('click',returnToMenu);
+  document.getElementById('btn-pause').addEventListener('click',togglePause);
+  document.getElementById('btn-fs').addEventListener('click',()=>{
+    if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{});
     else document.exitFullscreen();
   });
-
-  let muted = false;
-  document.getElementById('btn-mute').addEventListener('click', function () {
-    muted = !muted;
-    this.textContent = muted ? '🔇' : '🔊';
-    if (audioCtx) {
-      if (muted) audioCtx.suspend(); else audioCtx.resume();
-    }
+  let muted=false;
+  document.getElementById('btn-mute').addEventListener('click',function(){
+    muted=!muted;this.textContent=muted?'🔇':'🔊';
+    if(audioCtx){if(muted)audioCtx.suspend();else audioCtx.resume();}
   });
 }
 
 /* ═══════════════════════════════════════════════
-   AUDIO — procedural river sounds
+   AUDIO  — layered procedural river sound
    ═══════════════════════════════════════════════ */
-function initAudio() {
-  if (audioCtx) return;
-  try {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function initAudio(){
+  if(audioCtx)return;
+  try{
+    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const sr=audioCtx.sampleRate, len=sr*2;
 
-    // River rushing sound — filtered noise with character
-    const bufSize = audioCtx.sampleRate * 2;
-    const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < bufSize; i++) {
-      data[i] = (Math.random() * 2 - 1) * 0.35;
-    }
-    const src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    src.loop = true;
+    // Layer 1: low rumble
+    const b1=audioCtx.createBuffer(1,len,sr), d1=b1.getChannelData(0);
+    for(let i=0;i<len;i++) d1[i]=(Math.random()*2-1)*.35;
+    const s1=audioCtx.createBufferSource();s1.buffer=b1;s1.loop=true;
+    const lp=audioCtx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=400;
+    gainNode=audioCtx.createGain();gainNode.gain.value=.14;
+    s1.connect(lp).connect(gainNode).connect(audioCtx.destination);
+    s1.start();
 
-    // Bandpass filter for river sound
-    const bp = audioCtx.createBiquadFilter();
-    bp.type = 'bandpass';
-    bp.frequency.value = 600;
-    bp.Q.value = 0.8;
+    // Layer 2: mid splash
+    const b2=audioCtx.createBuffer(1,len,sr), d2=b2.getChannelData(0);
+    for(let i=0;i<len;i++) d2[i]=(Math.random()*2-1)*.2;
+    const s2=audioCtx.createBufferSource();s2.buffer=b2;s2.loop=true;
+    const bp=audioCtx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=800;bp.Q.value=.7;
+    const g2=audioCtx.createGain();g2.gain.value=.08;
+    s2.connect(bp).connect(g2).connect(audioCtx.destination);
+    s2.start();
 
-    // Low-pass for rumble
-    const lp = audioCtx.createBiquadFilter();
-    lp.type = 'lowpass';
-    lp.frequency.value = 1200;
-
-    const gain = audioCtx.createGain();
-    gain.gain.value = 0.15;
-
-    src.connect(bp).connect(lp).connect(gain).connect(audioCtx.destination);
-    src.start();
-
-    // Add a second layer — higher frequency splash
-    const buf2 = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-    const data2 = buf2.getChannelData(0);
-    for (let i = 0; i < bufSize; i++) {
-      data2[i] = (Math.random() * 2 - 1) * 0.15;
-    }
-    const src2 = audioCtx.createBufferSource();
-    src2.buffer = buf2;
-    src2.loop = true;
-
-    const hp = audioCtx.createBiquadFilter();
-    hp.type = 'highpass';
-    hp.frequency.value = 2000;
-
-    const gain2 = audioCtx.createGain();
-    gain2.gain.value = 0.06;
-
-    src2.connect(hp).connect(gain2).connect(audioCtx.destination);
-    src2.start();
-  } catch (_) {}
+    // Layer 3: high detail
+    const b3=audioCtx.createBuffer(1,len,sr), d3=b3.getChannelData(0);
+    for(let i=0;i<len;i++) d3[i]=(Math.random()*2-1)*.12;
+    const s3=audioCtx.createBufferSource();s3.buffer=b3;s3.loop=true;
+    const hp=audioCtx.createBiquadFilter();hp.type='highpass';hp.frequency.value=2500;
+    const g3=audioCtx.createGain();g3.gain.value=.04;
+    s3.connect(hp).connect(g3).connect(audioCtx.destination);
+    s3.start();
+  }catch(_){}
 }
 
 /* ═══════════════════════════════════════════════
    RESIZE
    ═══════════════════════════════════════════════ */
-function onResize() {
-  camera.aspect = innerWidth / innerHeight;
+function onResize(){
+  camera.aspect=innerWidth/innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
+  renderer.setSize(innerWidth,innerHeight);
 }
 
 /* ═══════════════════════════════════════════════
